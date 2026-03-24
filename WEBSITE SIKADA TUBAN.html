@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIKADA TUBAN — Sistem Informasi Keuangan & Anggaran Dana Desa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#0F3D2E;--primary-mid:#1A5C43;--primary-light:#2E8B5A;
+  --accent:#F5A623;--accent-red:#E53935;--accent-blue:#1565C0;--accent-teal:#00796B;
+  --bg:#F0F4F1;--bg2:#E8EFE9;--card:#FFF;--card2:#F7FAF8;
+  --text:#0D1F17;--text2:#3A5244;--text3:#6B8A79;
+  --border:#C8DDD2;--shadow:0 2px 12px rgba(15,61,46,.08);--shadow-lg:0 8px 32px rgba(15,61,46,.14);
+  --radius:12px;--font:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* SCREENS */
+.screen{display:none;}
+.screen.active{display:block;}
+#sc-login.active{display:flex;}
+#sc-app.active{display:flex;}
+
+/* ===== LANDING ===== */
+.land{min-height:100vh;background:linear-gradient(135deg,#071f15 0%,#0F3D2E 40%,#1A5C43 100%);color:#fff;display:flex;flex-direction:column;}
+.land-nav{padding:20px 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07);}
+.land-brand{display:flex;align-items:center;gap:14px;}
+.land-badge{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:10px;padding:8px 14px;font-size:16px;font-weight:800;color:#F5A623;letter-spacing:.5px;}
+.land-brand-sub{font-size:11px;color:rgba(255,255,255,.4);max-width:240px;line-height:1.5;}
+.land-nav-btns{display:flex;gap:10px;}
+.lbtn{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);border:none;transition:all .2s;}
+.lbtn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.25);}
+.lbtn-ghost:hover{border-color:rgba(255,255,255,.6);}
+.lbtn-gold{background:#F5A623;color:#0F3D2E;}
+.lbtn-gold:hover{background:#e09318;}
+.land-hero{flex:1;display:flex;flex-direction:column;align-items:center;padding:64px 48px 48px;text-align:center;}
+.land-chip{display:inline-block;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:#F5A623;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:24px;}
+.land-h1{font-size:clamp(32px,4.5vw,60px);font-weight:800;line-height:1.1;margin-bottom:18px;}
+.land-h1 em{color:#F5A623;font-style:normal;}
+.land-sub{font-size:14px;color:rgba(255,255,255,.58);max-width:520px;line-height:1.8;margin:0 auto 40px;}
+.land-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:64px;}
+.land-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%;max-width:840px;margin:0 auto;}
+.land-stat{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:20px;text-align:center;}
+.land-stat-v{font-size:28px;font-weight:800;font-family:var(--mono);color:#F5A623;}
+.land-stat-l{font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;}
+.land-feats{width:100%;max-width:900px;margin:56px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.land-feat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:18px;}
+.land-feat-t{font-size:13px;font-weight:700;margin-bottom:5px;}
+.land-feat-d{font-size:11.5px;color:rgba(255,255,255,.42);line-height:1.6;}
+.land-roles{width:100%;max-width:700px;margin:52px auto 0;}
+.land-role-h{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;text-align:center;}
+.land-role-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.role-card{background:rgba(255,255,255,.055);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 10px;cursor:pointer;transition:all .2s;text-align:center;font-family:var(--font);}
+.role-card:hover{background:rgba(245,166,35,.12);border-color:rgba(245,166,35,.35);}
+.role-card-n{font-size:12px;font-weight:700;color:#fff;margin-top:2px;}
+.role-card-d{font-size:10px;color:rgba(255,255,255,.38);margin-top:2px;}
+.land-foot{padding:20px 48px;border-top:1px solid rgba(255,255,255,.07);text-align:center;font-size:11px;color:rgba(255,255,255,.25);}
+
+/* ===== LOGIN ===== */
+.login-wrap{min-height:100vh;width:100%;display:flex;}
+.login-left{flex:1;background:linear-gradient(150deg,#071f15 0%,#0F3D2E 50%,#1A5C43 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;color:#fff;}
+.login-right{width:480px;flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center;padding:48px;overflow-y:auto;}
+.login-logo{font-size:32px;font-weight:800;color:#F5A623;margin-bottom:8px;}
+.login-tagline{font-size:13px;color:rgba(255,255,255,.5);text-align:center;max-width:280px;line-height:1.7;margin-bottom:40px;}
+.login-side-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:300px;}
+.lss{background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:14px;}
+.lss-v{font-size:22px;font-weight:800;font-family:var(--mono);color:#F5A623;}
+.lss-l{font-size:10px;color:rgba(255,255,255,.38);margin-top:3px;}
+.login-fw{width:100%;}
+.login-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.login-desc{font-size:13px;color:var(--text3);margin-bottom:22px;}
+.role-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
+.rpick-btn{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--card);transition:all .2s;text-align:left;font-family:var(--font);}
+.rpick-btn:hover{border-color:var(--primary-light);background:var(--bg);}
+.rpick-btn.sel{border-color:var(--primary-light);background:#e8f5e9;}
+.rpick-btn-n{font-size:12px;font-weight:700;color:var(--text);}
+.rpick-btn-d{font-size:10px;color:var(--text3);margin-top:2px;}
+.anon-info{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:10px 12px;font-size:11.5px;color:#1b5e20;margin-bottom:14px;display:none;}
+.anon-info.show{display:block;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.form-control{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--font);color:var(--text);background:var(--card);outline:none;transition:border-color .2s;}
+.form-control:focus{border-color:var(--primary-light);}
+textarea.form-control{resize:vertical;min-height:88px;}
+.form-hint{font-size:11px;color:var(--text3);margin-top:4px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.login-extras{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.login-extras label{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;}
+.link{color:var(--primary-light);cursor:pointer;font-size:12px;font-weight:600;text-decoration:none;}
+.login-back{text-align:center;margin-top:14px;font-size:12px;color:var(--text3);}
+
+/* ===== APP LAYOUT ===== */
+#sidebar{width:262px;flex-shrink:0;background:var(--primary);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;}
+#main-wrap{flex:1;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;}
+.sidebar-logo{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.09);}
+.logo-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,.13);border:1px solid rgba(245,166,35,.28);border-radius:9px;padding:7px 11px;margin-bottom:8px;}
+.logo-title{font-size:14px;font-weight:800;color:#F5A623;letter-spacing:.5px;}
+.logo-sub{font-size:10.5px;color:rgba(255,255,255,.5);line-height:1.45;margin-top:3px;}
+.nav-section{padding:10px 10px 2px;}
+.nav-label{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:0 8px;margin-bottom:5px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:12.5px;color:rgba(255,255,255,.65);font-weight:500;transition:all .2s;margin-bottom:1px;border:none;background:transparent;width:100%;text-align:left;font-family:var(--font);}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.nav-item.active{background:rgba(245,166,35,.18);color:#F5A623;}
+.nav-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.nav-badge{margin-left:auto;background:#E53935;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;}
+.nav-badge-orange{background:#FF6F00;}
+.sidebar-footer{margin-top:auto;padding:14px 16px;border-top:1px solid rgba(255,255,255,.09);}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.065);border-radius:8px;margin-bottom:10px;cursor:pointer;border:none;font-family:var(--font);width:100%;text-align:left;}
+.sb-ava{width:32px;height:32px;border-radius:8px;background:rgba(245,166,35,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#F5A623;flex-shrink:0;}
+.sb-info{flex:1;overflow:hidden;}
+.sb-name{font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-role{font-size:10px;color:rgba(255,255,255,.38);}
+.realtime-dot{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.45);}
+.pulse{width:7px;height:7px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+
+/* ===== TOPBAR ===== */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(240,244,241,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 22px;display:flex;align-items:center;gap:14px;}
+.topbar-title{font-size:15px;font-weight:700;color:var(--text);flex:1;}
+.topbar-date{font-size:11.5px;color:var(--text3);font-family:var(--mono);}
+
+/* ===== BTNS ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:var(--font);}
+.btn-sm{padding:5px 10px;font-size:11px;}
+.btn-primary{background:var(--primary-light);color:#fff;}
+.btn-primary:hover{background:var(--primary);}
+.btn-outline{background:transparent;color:var(--text2);border:1.5px solid var(--border);}
+.btn-outline:hover{border-color:var(--primary-light);color:var(--primary);}
+.btn-danger{background:#FFEBEE;color:#C62828;border:1.5px solid #FFCDD2;}
+.btn-danger:hover{background:#FFCDD2;}
+
+/* ===== PAGES ===== */
+.page{display:none;padding:22px;}
+.page.active{display:block;}
+
+/* ===== CARDS ===== */
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:13.5px;font-weight:700;color:var(--text);}
+.card-body{padding:18px;}
+
+/* ===== STAT CARDS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:18px;border:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s;}
+.stat-card:hover{box-shadow:var(--shadow-lg);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc,var(--primary-light));}
+.stat-label{font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;}
+.stat-value{font-size:22px;font-weight:800;color:var(--text);line-height:1;margin-bottom:5px;font-family:var(--mono);}
+.stat-sub{font-size:11.5px;color:var(--text3);}
+.stat-icon{position:absolute;right:14px;top:14px;font-size:26px;opacity:.1;font-weight:900;}
+.stat-change{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:6px;}
+.sc-up{background:#E8F5E9;color:#2E7D32;}
+.sc-down{background:#FFEBEE;color:#C62828;}
+.sc-warn{background:#FFF8E1;color:#F57F17;}
+
+/* ===== TABLE ===== */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{text-align:left;padding:9px 11px;font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;border-bottom:2px solid var(--border);background:var(--card2);}
+td{padding:10px 11px;border-bottom:1px solid #f0f0f0;vertical-align:middle;color:var(--text);}
+tr:hover td{background:var(--bg);}
+tr:last-child td{border-bottom:none;}
+
+/* ===== BADGES ===== */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700;}
+.bg-green{background:#E8F5E9;color:#2E7D32;}
+.bg-red{background:#FFEBEE;color:#C62828;}
+.bg-yellow{background:#FFF8E1;color:#E65100;}
+.bg-blue{background:#E3F2FD;color:#1565C0;}
+.bg-gray{background:#F5F5F5;color:#616161;}
+.bg-purple{background:#F3E5F5;color:#6A1B9A;}
+.bg-teal{background:#E0F2F1;color:#00695C;}
+.bg-orange{background:#FBE9E7;color:#BF360C;}
+
+/* ===== PROGRESS ===== */
+.progress-bar{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;margin:5px 0;}
+.progress-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.pf-green{background:linear-gradient(90deg,#43A047,#66BB6A);}
+.pf-yellow{background:linear-gradient(90deg,#F57C00,#FFA726);}
+.pf-red{background:linear-gradient(90deg,#C62828,#EF5350);}
+.pf-blue{background:linear-gradient(90deg,#1565C0,#42A5F5);}
+
+/* ===== MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border-radius:15px;width:100%;max-width:640px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:mIn .25s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(.96)translateY(8px)}to{opacity:1;transform:none}}
+.modal-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:1;}
+.modal-title{font-size:15px;font-weight:800;color:var(--text);}
+.modal-close{width:30px;height:30px;background:var(--bg);border:none;border-radius:7px;cursor:pointer;font-size:16px;color:var(--text3);display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:22px;}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px;background:var(--card2);}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:4px;background:var(--bg2);border-radius:9px;padding:4px;margin-bottom:18px;width:fit-content;}
+.tab{padding:6px 15px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text3);transition:all .2s;border:none;background:transparent;font-family:var(--font);}
+.tab.active{background:var(--card);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+
+/* ===== ALERT ===== */
+.alert{padding:11px 15px;border-radius:8px;font-size:12.5px;display:flex;gap:9px;align-items:flex-start;margin-bottom:14px;}
+.alert-warn{background:#FFF8E1;border-left:3px solid #F57F17;color:#E65100;}
+.alert-danger{background:#FFEBEE;border-left:3px solid #C62828;color:#B71C1C;}
+.alert-success{background:#E8F5E9;border-left:3px solid #2E7D32;color:#1B5E20;}
+.alert-info{background:#E3F2FD;border-left:3px solid #1565C0;color:#0D47A1;}
+
+/* ===== AI RESULT ===== */
+.ai-result{border-radius:10px;padding:13px 15px;margin-top:10px;background:linear-gradient(135deg,#E8F5E9,#F1F8E9);border:1px solid #A5D6A7;}
+.ai-result.warning{background:linear-gradient(135deg,#FFF8E1,#FFF3E0);border-color:#FFCC02;}
+.ai-label{font-size:10.5px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.ai-confidence{font-size:19px;font-weight:800;}
+.ai-desc{font-size:11.5px;color:var(--text2);margin-top:4px;line-height:1.55;}
+
+/* ===== REPORT ===== */
+.report-item{background:var(--card);border-radius:10px;padding:15px;border:1px solid var(--border);margin-bottom:11px;}
+.report-header{display:flex;align-items:flex-start;gap:11px;margin-bottom:9px;}
+.anon-avatar{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#E8F5E9,#C8E6C9);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--primary);flex-shrink:0;}
+.report-id{font-size:10.5px;font-weight:700;color:var(--text3);font-family:var(--mono);}
+.report-title{font-size:13.5px;font-weight:700;color:var(--text);margin-top:1px;}
+.report-body{font-size:12.5px;color:var(--text2);line-height:1.6;}
+
+/* ===== PROOF GRID ===== */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px;}
+.proof-img{aspect-ratio:4/3;border-radius:8px;overflow:hidden;cursor:pointer;background:var(--bg2);border:1px solid var(--border);position:relative;display:flex;align-items:center;justify-content:center;font-size:22px;flex-direction:column;gap:4px;}
+.proof-img span{font-size:10px;font-weight:600;color:var(--text3);}
+.proof-ai-tag{position:absolute;bottom:4px;right:4px;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;}
+.proof-ai-ok{background:#4CAF50;color:#fff;}
+.proof-ai-warn{background:#FF9800;color:#fff;}
+.proof-ai-fake{background:#F44336;color:#fff;}
+
+/* ===== AUDITOR CARD ===== */
+.auditor-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;transition:box-shadow .2s;cursor:pointer;}
+.auditor-card:hover{box-shadow:var(--shadow-lg);}
+.auditor-cover{height:75px;background:linear-gradient(135deg,var(--primary),var(--primary-mid));position:relative;}
+.auditor-avatar{width:56px;height:56px;border-radius:50%;border:3px solid #fff;position:absolute;bottom:-18px;left:18px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--primary);}
+.auditor-body{padding:26px 18px 18px;}
+.auditor-name{font-size:14px;font-weight:800;color:var(--text);}
+.auditor-cert{font-size:10.5px;color:var(--text3);font-family:var(--mono);margin:3px 0 7px;}
+.auditor-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.auditor-stat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:11px;border-top:1px solid var(--border);}
+.aud-stat-n{font-size:15px;font-weight:800;color:var(--primary);font-family:var(--mono);}
+.aud-stat-l{font-size:9.5px;color:var(--text3);font-weight:600;}
+
+/* ===== CV AUDITOR ===== */
+.cv-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
+.cv-head{padding:14px 18px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cv-body{padding:18px;}
+.cv-item{display:flex;gap:12px;margin-bottom:13px;}
+.cv-yr{font-size:10.5px;font-weight:700;color:var(--text3);font-family:var(--mono);flex-shrink:0;width:38px;margin-top:2px;}
+.cv-content-t{font-size:12.5px;font-weight:700;color:var(--text);}
+.cv-content-d{font-size:11.5px;color:var(--text3);margin-top:1px;}
+
+/* ===== DEADLINE ===== */
+.deadline-bar{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);}
+.deadline-days{font-size:20px;font-weight:900;font-family:var(--mono);}
+.deadline-label{font-size:11.5px;color:var(--text3);}
+.dl-ok .deadline-days{color:#2E7D32;}
+.dl-warn .deadline-days{color:#E65100;}
+.dl-over .deadline-days{color:#C62828;}
+
+/* ===== DETECT ALERT ===== */
+.detect-alert{background:linear-gradient(135deg,#FFEBEE,#FCE4EC);border:2px solid #EF9A9A;border-radius:12px;padding:15px;margin-bottom:15px;position:relative;overflow:hidden;}
+.detect-alert::before{content:'ANOMALI TERDETEKSI';position:absolute;top:0;right:0;background:#C62828;color:#fff;font-size:9.5px;font-weight:800;padding:3px 10px;border-radius:0 12px 0 8px;letter-spacing:1px;}
+.detect-title{font-size:13.5px;font-weight:800;color:#B71C1C;margin-bottom:4px;}
+.detect-desc{font-size:12.5px;color:#C62828;line-height:1.55;}
+.detect-markup{font-size:17px;font-weight:900;color:#B71C1C;font-family:var(--mono);}
+
+/* ===== FILE UPLOAD ===== */
+.file-upload-area{border:2px dashed var(--border);border-radius:9px;padding:22px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
+.file-upload-area:hover{border-color:var(--primary-light);background:#E8F5E9;}
+.file-upload-text{font-size:13px;color:var(--text2);font-weight:600;}
+.file-upload-hint{font-size:11px;color:var(--text3);margin-top:4px;}
+
+/* ===== MAP ===== */
+.map-visual{background:linear-gradient(135deg,#0a2819 0%,#0F3D2E 50%,#1A5C43 100%);border-radius:12px;padding:26px;min-height:320px;position:relative;overflow:hidden;}
+.map-desa-dot{position:absolute;width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.8);cursor:pointer;transition:transform .2s;z-index:2;}
+.map-desa-dot:hover{transform:scale(1.6);}
+.map-dot-ok{background:#4CAF50;}
+.map-dot-warn{background:#FF9800;animation:pulse 2s infinite;}
+.map-dot-kritis{background:#E53935;animation:pulse 1.2s infinite;}
+.map-detail-box{background:rgba(0,0,0,.7);border-radius:10px;padding:14px 16px;color:#fff;margin-top:14px;display:none;}
+.map-legend{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
+.map-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
+.map-legend-dot{width:10px;height:10px;border-radius:50%;}
+
+/* ===== ANGGARAN ===== */
+.ang-banner{background:linear-gradient(135deg,var(--primary),var(--primary-mid));color:#fff;border-radius:12px;padding:20px 24px;margin-bottom:18px;}
+.ang-banner-t{font-size:18px;font-weight:800;}
+.ang-banner-s{font-size:11.5px;opacity:.65;margin-top:4px;}
+.ang-sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+.ang-sum-card{background:var(--card);border-radius:10px;padding:15px;border:1px solid var(--border);}
+.ang-sum-v{font-size:19px;font-weight:800;color:var(--primary);font-family:var(--mono);}
+.ang-sum-l{font-size:11px;color:var(--text3);margin-top:3px;}
+
+/* ===== MISC ===== */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;}
+.flex-between{display:flex;align-items:center;justify-content:space-between;}
+.flex{display:flex;align-items:center;}
+.gap-8{gap:8px;}.gap-10{gap:10px;}
+.mt-4{margin-top:4px;}.mt-8{margin-top:8px;}.mt-12{margin-top:12px;}.mt-16{margin-top:16px;}.mt-20{margin-top:20px;}
+.mb-8{margin-bottom:8px;}.mb-12{margin-bottom:12px;}.mb-16{margin-bottom:16px;}.mb-20{margin-bottom:20px;}
+.text-sm{font-size:12px;}.text-xs{font-size:11px;}.text-muted{color:var(--text3);}
+.font-bold{font-weight:700;}.font-mono{font-family:var(--mono);}
+.w-full{width:100%;}.text-right{text-align:right;}
+.divider{border:none;border-top:1px solid var(--border);margin:15px 0;}
+.anomaly-row td{background:#FFF8E1 !important;}
+.anomaly-row td:first-child{border-left:3px solid #FF6F00;}
+.search-box{position:relative;}
+.search-box input{padding-left:34px;}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:13px;}
+.toast-container{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px;}
+.toast{background:var(--primary);color:#fff;padding:11px 16px;border-radius:9px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow-lg);animation:toastIn .3s ease;min-width:250px;}
+@keyframes toastIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.toast.success{background:#2E7D32;}.toast.warning{background:#E65100;}.toast.danger{background:#C62828;}
+@media(max-width:1100px){.stats-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SCREEN: LANDING -->
+<!-- ============================================================ -->
+<div id="sc-landing" class="screen active">
+<div class="land">
+  <nav class="land-nav">
+    <div class="land-brand">
+      <div class="land-badge">SIKADA TUBAN</div>
+      <div class="land-brand-sub">Sistem Informasi Keuangan &amp; Anggaran Dana Desa Kabupaten Tuban</div>
+    </div>
+    <div class="land-nav-btns">
+      <button class="lbtn lbtn-ghost" onclick="gotoLogin('publik')">Lihat Data Publik</button>
+      <button class="lbtn lbtn-gold" onclick="gotoLogin('admin')">Masuk / Login</button>
+    </div>
+  </nav>
+  <div class="land-hero">
+    <div class="land-chip">Transparansi Dana Desa 2026</div>
+    <h1 class="land-h1">Transparansi &amp; Akuntabilitas<br><em>Dana Desa Kabupaten Tuban</em></h1>
+    <p class="land-sub">Platform resmi pemantauan, pengawasan, dan pelaporan anggaran dana desa. Audit berbasis standarisasi harga. Laporan warga anonim dilindungi enkripsi penuh.</p>
+    <div class="land-cta">
+      <button class="lbtn lbtn-gold" onclick="gotoLogin('publik')">Pantau Anggaran Desa</button>
+      <button class="lbtn lbtn-ghost" onclick="gotoLogin('warga')">Laporan Masalah Anonim</button>
+    </div>
+    <div class="land-stats">
+      <div class="land-stat"><div class="land-stat-v">137</div><div class="land-stat-l">Desa Dipantau</div></div>
+      <div class="land-stat"><div class="land-stat-v">Rp 4,2M</div><div class="land-stat-l">Total APBDes 2026</div></div>
+      <div class="land-stat"><div class="land-stat-v">4</div><div class="land-stat-l">Anomali Aktif</div></div>
+      <div class="land-stat"><div class="land-stat-v">3</div><div class="land-stat-l">Auditor Independen</div></div>
+    </div>
+    <div class="land-feats">
+      <div class="land-feat"><div class="land-feat-t">Audit Standarisasi Harga</div><div class="land-feat-d">Semua pengajuan dan invoice diperiksa auditor berdasarkan Perbup No.3/2026. Toleransi seragam 10% untuk semua item.</div></div>
+      <div class="land-feat"><div class="land-feat-t">AI Vision Bukti Foto</div><div class="land-feat-d">AI hanya digunakan untuk memverifikasi keaslian foto bukti pembangunan dan foto laporan warga. Bukan untuk cek harga.</div></div>
+      <div class="land-feat"><div class="land-feat-t">Laporan Warga Anonim</div><div class="land-feat-d">Identitas pelapor dilindungi enkripsi penuh. Tidak ada data personal yang dikumpulkan. Dijamin UU PDP.</div></div>
+      <div class="land-feat"><div class="land-feat-t">Batas Waktu Wajib</div><div class="land-feat-d">Setiap pengajuan dan proyek harus memiliki deadline. Keterlambatan otomatis tercatat dan dilaporkan ke Inspektorat.</div></div>
+      <div class="land-feat"><div class="land-feat-t">Invoice Terverifikasi</div><div class="land-feat-d">Semua tagihan diperiksa auditor dan dicocokkan dengan standar harga Perbup sebelum diproses pembayaran.</div></div>
+      <div class="land-feat"><div class="land-feat-t">Peta Anggaran Real-time</div><div class="land-feat-d">Visualisasi distribusi dana per kecamatan dan desa. Desa dengan anomali ditandai secara otomatis.</div></div>
+    </div>
+    <div class="land-roles">
+      <div class="land-role-h">Pilih Peran untuk Masuk ke Sistem</div>
+      <div class="land-role-g">
+        <button class="role-card" onclick="gotoLogin('admin')"><div class="role-card-n">Admin Desa</div><div class="role-card-d">Kelola anggaran</div></button>
+        <button class="role-card" onclick="gotoLogin('auditor')"><div class="role-card-n">Auditor</div><div class="role-card-d">Verifikasi &amp; audit</div></button>
+        <button class="role-card" onclick="gotoLogin('inspektorat')"><div class="role-card-n">Inspektorat</div><div class="role-card-d">Pengawasan</div></button>
+        <button class="role-card" onclick="gotoLogin('publik')"><div class="role-card-n">Publik / Warga</div><div class="role-card-d">Pantau &amp; lapor</div></button>
+      </div>
+    </div>
+  </div>
+  <div class="land-foot">Pemerintah Kabupaten Tuban &mdash; Sistem Informasi Keuangan &amp; Anggaran Dana Desa &mdash; Data 2026 &mdash; Perbup No.3/2026</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: LOGIN -->
+<!-- ============================================================ -->
+<div id="sc-login" class="screen">
+<div class="login-wrap">
+  <div class="login-left">
+    <div class="login-logo">SIKADA TUBAN</div>
+    <div class="login-tagline">Sistem Informasi Keuangan &amp; Anggaran Dana Desa Kabupaten Tuban. Transparansi adalah tanggung jawab bersama.</div>
+    <div class="login-side-stats">
+      <div class="lss"><div class="lss-v">137</div><div class="lss-l">Desa Dipantau</div></div>
+      <div class="lss"><div class="lss-v">Rp 4,2M</div><div class="lss-l">APBDes 2026</div></div>
+      <div class="lss"><div class="lss-v">23</div><div class="lss-l">Proyek Aktif</div></div>
+      <div class="lss"><div class="lss-v">4</div><div class="lss-l">Anomali Aktif</div></div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-fw">
+      <div class="login-title">Masuk ke SIKADA</div>
+      <div class="login-desc">Pilih peran Anda untuk melanjutkan</div>
+      <div class="role-pick" id="role-pick-wrap">
+        <button class="rpick-btn" onclick="setRole(this,'admin')"><div class="rpick-btn-n">Admin Desa</div><div class="rpick-btn-d">Kelola anggaran desa</div></button>
+        <button class="rpick-btn" onclick="setRole(this,'auditor')"><div class="rpick-btn-n">Auditor</div><div class="rpick-btn-d">Verifikasi &amp; audit</div></button>
+        <button class="rpick-btn" onclick="setRole(this,'inspektorat')"><div class="rpick-btn-n">Inspektorat</div><div class="rpick-btn-d">Pengawasan kabupaten</div></button>
+        <button class="rpick-btn" onclick="setRole(this,'publik')"><div class="rpick-btn-n">Publik / Warga</div><div class="rpick-btn-d">Pantau &amp; lapor</div></button>
+      </div>
+      <div class="anon-info" id="anon-info">Sebagai Publik/Warga, Anda dapat memantau data anggaran dan mengirimkan laporan anonim. Identitas tidak dikumpulkan.</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-control" id="inp-email" type="email" placeholder="email@domain.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nomor HP / WhatsApp</label>
+        <input class="form-control" id="inp-hp" type="tel" placeholder="08xxxxxxxxxx">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-control" id="inp-pass" type="password" placeholder="Masukkan password">
+      </div>
+      <div class="login-extras">
+        <label><input type="checkbox" style="accent-color:var(--primary-light)"> Ingat saya</label>
+        <a class="link" onclick="showModal('modal-lupapw')">Lupa password?</a>
+      </div>
+      <button class="btn btn-primary w-full" style="justify-content:center;padding:11px 0" onclick="doLogin()">Masuk ke Sistem</button>
+      <div class="login-back"><a class="link" onclick="gotoLanding()">Kembali ke Halaman Utama</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: APP -->
+<!-- ============================================================ -->
+<div id="sc-app" class="screen">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge"><span class="logo-title">SIKADA TUBAN</span></div>
+    <div class="logo-sub">Sistem Informasi Keuangan &amp; Anggaran Dana Desa Kabupaten Tuban</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <button class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">&#9632;</span> Dashboard Utama</button>
+    <button class="nav-item" onclick="showPage('map',this)"><span class="nav-icon">&#9670;</span> Peta Anggaran Desa</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Keuangan</div>
+    <button class="nav-item" onclick="showPage('anggaran',this)"><span class="nav-icon">&#9670;</span> Anggaran &amp; Dana</button>
+    <button class="nav-item" onclick="showPage('standar',this)"><span class="nav-icon">&#9632;</span> Standarisasi Harga</button>
+    <button class="nav-item" onclick="showPage('invoice',this)"><span class="nav-icon">&#9632;</span> Invoice &amp; Tagihan <span class="nav-badge">3</span></button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Pembangunan</div>
+    <button class="nav-item" onclick="showPage('pengajuan',this)"><span class="nav-icon">&#9632;</span> Pengajuan Dana</button>
+    <button class="nav-item" onclick="showPage('proyek',this)"><span class="nav-icon">&#9632;</span> Proyek Berjalan</button>
+    <button class="nav-item" onclick="showPage('bukti',this)"><span class="nav-icon">&#9632;</span> Bukti Pengerjaan</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Transparansi</div>
+    <button class="nav-item" onclick="showPage('laporan',this)"><span class="nav-icon">&#9632;</span> Laporan Warga <span class="nav-badge">7</span></button>
+    <button class="nav-item" onclick="showPage('auditor',this)"><span class="nav-icon">&#9632;</span> Auditor Independen</button>
+    <button class="nav-item" onclick="showPage('anomali',this)"><span class="nav-icon">&#9632;</span> Deteksi Anomali <span class="nav-badge nav-badge-orange">4</span></button>
+  </div>
+  <div class="sidebar-footer">
+    <button class="sb-user" onclick="showModal('modal-profile')">
+      <div class="sb-ava" id="sb-ava">AD</div>
+      <div class="sb-info">
+        <div class="sb-name" id="sb-name">Admin</div>
+        <div class="sb-role" id="sb-role">Kabupaten Tuban</div>
+      </div>
+    </button>
+    <div class="flex-between">
+      <div class="realtime-dot"><span class="pulse"></span> Live &mdash; <span id="clock">--:--:--</span></div>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN WRAP -->
+<div id="main-wrap">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Dashboard Utama</div>
+    <div class="topbar-date" id="topbar-date"></div>
+    <button class="btn btn-outline" onclick="showModal('modal-laporan')">Laporkan Masalah</button>
+    <button class="btn btn-primary" onclick="showModal('modal-pengajuan')">+ Pengajuan Baru</button>
+  </div>
+
+  <!-- PAGE: DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid">
+      <div class="stat-card" style="--sc:#2E8B5A" onclick="showPage('anggaran',null)">
+        <div class="stat-icon">Rp</div>
+        <div class="stat-label">Total Dana APBDes 2026</div>
+        <div class="stat-value">Rp 4,2M</div>
+        <div class="stat-sub">137 Desa Kab. Tuban</div>
+        <span class="stat-change sc-up">+8,4% dari 2025</span>
+      </div>
+      <div class="stat-card" style="--sc:#1565C0" onclick="showPage('anggaran',null)">
+        <div class="stat-icon">%</div>
+        <div class="stat-label">Terserap YTD</div>
+        <div class="stat-value">Rp 2,8M</div>
+        <div class="stat-sub">67,2% realisasi</div>
+        <span class="stat-change sc-up">+12,1% vs target</span>
+      </div>
+      <div class="stat-card" style="--sc:#E65100" onclick="showPage('anomali',null)">
+        <div class="stat-icon">!</div>
+        <div class="stat-label">Anomali Terdeteksi</div>
+        <div class="stat-value">4</div>
+        <div class="stat-sub">Markup harga &amp; foto palsu</div>
+        <span class="stat-change sc-down">+2 baru minggu ini</span>
+      </div>
+      <div class="stat-card" style="--sc:#6A1B9A" onclick="showPage('proyek',null)">
+        <div class="stat-icon">#</div>
+        <div class="stat-label">Proyek Aktif</div>
+        <div class="stat-value">23</div>
+        <div class="stat-sub">7 mendekati deadline</div>
+        <span class="stat-change sc-warn">3 terlambat</span>
+      </div>
+    </div>
+    <div class="detect-alert mb-20">
+      <div class="detect-title">Auditor Mendeteksi Dugaan Mark-Up Harga — Desa Palang</div>
+      <div class="detect-desc">
+        Pengajuan Jalan Desa RT03-04 Rp 287.400.000 — harga beton per m2 diajukan
+        <span class="detect-markup">Rp 2.850.000</span> vs standar Perbup
+        <span class="detect-markup">Rp 1.920.000</span>
+        — selisih <strong>+48,4%</strong>, jauh di atas toleransi 10%. Pengajuan dikembalikan ke desa untuk revisi. Auditor: Dr. M. Ihsan, CPA.
+      </div>
+    </div>
+    <div class="alert alert-info mb-20">
+      <span style="flex-shrink:0;font-size:14px;">i</span>
+      <div><strong>Catatan sistem:</strong> Pemeriksaan harga dilakukan oleh <strong>auditor</strong> berdasarkan standarisasi harga Perbup. <strong>AI Vision</strong> hanya digunakan untuk verifikasi keaslian foto bukti pembangunan dan foto laporan warga — bukan untuk cek harga.</div>
+    </div>
+    <div class="grid-2 mb-20">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Realisasi per Bidang (2026)</div>
+          <span class="badge bg-green">Live</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Infrastruktur &amp; Jalan</span><span class="text-sm font-mono" style="color:var(--primary)">74%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-green" style="width:74%"></div></div>
+            <div class="text-xs text-muted">Rp 1,48M / Rp 2,0M</div>
+          </div>
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Pemberdayaan Masyarakat</span><span class="text-sm font-mono" style="color:#1565C0">61%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-blue" style="width:61%"></div></div>
+            <div class="text-xs text-muted">Rp 488M / Rp 800M</div>
+          </div>
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Pendidikan &amp; Kesehatan</span><span class="text-sm font-mono" style="color:#E65100">55%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-yellow" style="width:55%"></div></div>
+            <div class="text-xs text-muted">Rp 385M / Rp 700M</div>
+          </div>
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Administrasi &amp; ATK</span><span class="text-sm font-mono" style="color:#C62828">38%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-red" style="width:38%"></div></div>
+            <div class="text-xs text-muted">Rp 269M / Rp 700M</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Pencairan Dana Bulanan 2026</div></div>
+        <div class="card-body">
+          <div id="monthly-chart" style="height:175px;display:flex;align-items:flex-end;gap:5px;padding-bottom:20px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Aktivitas Terbaru</div></div>
+        <div class="card-body" style="padding:0"><div id="activity-feed"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Top Desa — Transparansi Score</div></div>
+        <div class="card-body" style="padding:0"><div id="transparency-rank"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: MAP -->
+  <div class="page" id="page-map">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Peta Anggaran Desa Kabupaten Tuban 2026</div>
+        <div class="text-sm text-muted mt-4">Sebaran dana dan status anomali per desa. Klik titik untuk melihat detail.</div>
+      </div>
+    </div>
+    <div class="grid-2 mb-20">
+      <div>
+        <div class="map-visual" id="map-canvas">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;margin-bottom:14px;">KABUPATEN TUBAN — 20 KECAMATAN</div>
+          <div class="map-desa-dot map-dot-kritis" style="top:38%;left:22%" onclick="mapDetail('Desa Palang','Kec. Palang','Rp 850 Jt','Anomali markup beton +48,4%','kritis')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:28%;left:42%" onclick="mapDetail('Desa Rengel','Kec. Rengel','Rp 620 Jt','Normal, progres on-track','ok')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:52%;left:32%" onclick="mapDetail('Desa Semanding','Kec. Semanding','Rp 740 Jt','Drainase selesai 100%','ok')"></div>
+          <div class="map-desa-dot map-dot-warn" style="top:24%;left:58%" onclick="mapDetail('Desa Plumpang','Kec. Plumpang','Rp 680 Jt','AI Vision: foto bukti tidak konsisten','warn')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:58%;left:52%" onclick="mapDetail('Desa Merakurak','Kec. Merakurak','Rp 920 Jt','Balai desa berjalan normal','ok')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:32%;left:70%" onclick="mapDetail('Desa Kerek','Kec. Kerek','Rp 510 Jt','PJU LED disetujui','ok')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:68%;left:45%" onclick="mapDetail('Desa Bancar','Kec. Bancar','Rp 430 Jt','2 proyek berjalan normal','ok')"></div>
+          <div class="map-desa-dot map-dot-warn" style="top:45%;left:66%" onclick="mapDetail('Desa Montong','Kec. Montong','Rp 390 Jt','Invoice jatuh tempo belum dilunasi','warn')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:20%;left:36%" onclick="mapDetail('Desa Widang','Kec. Widang','Rp 480 Jt','Semua proyek berjalan lancar','ok')"></div>
+          <div class="map-desa-dot map-dot-ok" style="top:48%;left:20%" onclick="mapDetail('Desa Jatirogo','Kec. Jatirogo','Rp 350 Jt','Transparansi score 89','ok')"></div>
+          <div id="map-detail-box" class="map-detail-box"></div>
+        </div>
+        <div class="map-legend mt-12">
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#4CAF50"></div> Normal</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#FF9800"></div> Perlu Perhatian</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#E53935"></div> Anomali Kritis</div>
+        </div>
+      </div>
+      <div>
+        <div class="card mb-16">
+          <div class="card-header"><div class="card-title">Distribusi Dana per Kecamatan</div></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Kecamatan</th><th>Jml Desa</th><th>Total Dana</th><th>Serapan</th><th>Status</th></tr></thead>
+              <tbody id="map-table"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:1fr 1fr;margin-bottom:0">
+          <div class="stat-card" style="--sc:#2E8B5A"><div class="stat-label">Total Kecamatan</div><div class="stat-value">20</div></div>
+          <div class="stat-card" style="--sc:#1565C0"><div class="stat-label">Total Desa</div><div class="stat-value">328</div></div>
+          <div class="stat-card" style="--sc:#E65100"><div class="stat-label">Desa Bermasalah</div><div class="stat-value">5</div></div>
+          <div class="stat-card" style="--sc:#2E8B5A"><div class="stat-label">Desa Score &gt;80</div><div class="stat-value">289</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: ANGGARAN -->
+  <div class="page" id="page-anggaran">
+    <div class="ang-banner">
+      <div class="ang-banner-t">Anggaran &amp; Dana Desa Kabupaten Tuban 2026</div>
+      <div class="ang-banner-s">Total APBDes Rp 4.200.000.000 | 137 Desa | Tahun Anggaran 2026 | Sumber: SISKEUDES</div>
+    </div>
+    <div class="ang-sum-grid">
+      <div class="ang-sum-card"><div class="ang-sum-v">Rp 2,1M</div><div class="ang-sum-l">Dana Desa (APBN)</div></div>
+      <div class="ang-sum-card"><div class="ang-sum-v">Rp 1,4M</div><div class="ang-sum-l">Alokasi Dana Desa / ADD (APBD)</div></div>
+      <div class="ang-sum-card"><div class="ang-sum-v">Rp 700Jt</div><div class="ang-sum-l">Bagi Hasil Pajak &amp; Retribusi</div></div>
+    </div>
+    <div class="card mb-20">
+      <div class="card-header">
+        <div class="card-title">Rekap APBDes per Desa 2026</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <select class="form-control" style="width:160px;padding:6px 10px;font-size:12px" id="filter-kec" onchange="filterAnggaran(this.value)">
+            <option value="">Semua Kecamatan</option>
+            <option>Palang</option><option>Rengel</option><option>Semanding</option><option>Plumpang</option>
+            <option>Merakurak</option><option>Kerek</option><option>Bancar</option><option>Widang</option>
+          </select>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Mengunduh laporan anggaran...','success')">Export PDF</button>
+          <button class="btn btn-primary btn-sm" onclick="showToast('Mengekspor ke Excel...','success')">Export Excel</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>No</th><th>Desa</th><th>Kecamatan</th><th>Dana Desa (APBN)</th><th>ADD (APBD)</th><th>Lainnya</th><th>Total APBDes</th><th>Serapan</th><th>Status Audit</th><th>Aksi</th></tr></thead>
+          <tbody id="anggaran-table"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Rincian Bidang Penggunaan Dana</div></div>
+        <div class="card-body">
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Pembangunan Desa</span><span class="text-sm font-mono" style="color:var(--primary)">45%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-green" style="width:45%"></div></div>
+            <div class="text-xs text-muted">Rp 1.890.000.000</div>
+          </div>
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Pemberdayaan Masyarakat</span><span class="text-sm font-mono" style="color:#1565C0">20%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-blue" style="width:20%"></div></div>
+            <div class="text-xs text-muted">Rp 840.000.000</div>
+          </div>
+          <div class="mb-12">
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Penyelenggaraan Pemerintahan</span><span class="text-sm font-mono" style="color:#E65100">18%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-yellow" style="width:18%"></div></div>
+            <div class="text-xs text-muted">Rp 756.000.000</div>
+          </div>
+          <div>
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Penanggulangan Bencana</span><span class="text-sm font-mono" style="color:#C62828">7%</span></div>
+            <div class="progress-bar"><div class="progress-fill pf-red" style="width:7%"></div></div>
+            <div class="text-xs text-muted">Rp 294.000.000</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Status Serapan Anggaran 2026</div></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:var(--bg2);border-radius:9px;padding:14px;text-align:center">
+              <div style="font-size:28px;font-weight:800;color:#2E7D32;font-family:var(--mono)">67,2%</div>
+              <div class="text-xs text-muted mt-4">Realisasi Total</div>
+            </div>
+            <div style="background:var(--bg2);border-radius:9px;padding:14px;text-align:center">
+              <div style="font-size:28px;font-weight:800;color:#E65100;font-family:var(--mono)">32,8%</div>
+              <div class="text-xs text-muted mt-4">Belum Terserap</div>
+            </div>
+            <div style="background:#FFEBEE;border-radius:9px;padding:14px;text-align:center">
+              <div style="font-size:28px;font-weight:800;color:#C62828;font-family:var(--mono)">4</div>
+              <div class="text-xs text-muted mt-4">Desa Anomali</div>
+            </div>
+            <div style="background:#E8F5E9;border-radius:9px;padding:14px;text-align:center">
+              <div style="font-size:28px;font-weight:800;color:#2E7D32;font-family:var(--mono)">133</div>
+              <div class="text-xs text-muted mt-4">Desa Aman</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: STANDAR HARGA -->
+  <div class="page" id="page-standar">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Standarisasi Harga Kabupaten Tuban 2026</div>
+        <div class="text-sm text-muted mt-4">Acuan harga resmi pengadaan barang &amp; jasa — Peraturan Bupati No. 3/2026. Toleransi seragam 10%.</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" onclick="showModal('modal-harga-baru')">+ Tambah Item</button>
+        <button class="btn btn-primary" onclick="showToast('Mengunduh PDF standar harga...','success')">Export PDF</button>
+      </div>
+    </div>
+    <div class="alert alert-info mb-20">
+      <span style="flex-shrink:0">i</span>
+      <div><strong>Toleransi Harga Seragam 10%:</strong> Seluruh item standar harga berlaku toleransi seragam <strong>10%</strong> sesuai Perbup No. 3/2026. Harga pengajuan atau invoice yang melebihi standar + 10% akan otomatis ditandai untuk pemeriksaan auditor. Pemeriksaan harga adalah tugas auditor, bukan AI.</div>
+    </div>
+    <div class="tabs" id="standar-tabs">
+      <button class="tab active" onclick="filterStandar('semua',this)">Semua</button>
+      <button class="tab" onclick="filterStandar('konstruksi',this)">Konstruksi</button>
+      <button class="tab" onclick="filterStandar('atk',this)">ATK</button>
+      <button class="tab" onclick="filterStandar('makan',this)">Konsumsi</button>
+      <button class="tab" onclick="filterStandar('tenaga',this)">Tenaga Kerja</button>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="search-box" style="flex:1;max-width:300px">
+          <span class="search-icon">&#128269;</span>
+          <input class="form-control" placeholder="Cari item harga..." id="search-standar" oninput="searchStandar(this.value)" style="padding-left:33px">
+        </div>
+        <div class="text-sm text-muted">Update: <strong>2 Jan 2026</strong> &nbsp;|&nbsp; Toleransi semua item: <span class="badge bg-yellow">10%</span></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Nama Item</th><th>Kategori</th><th>Satuan</th><th>Harga Standar</th><th>Batas Atas (+10%)</th><th>Terakhir Update</th><th>Status</th></tr></thead>
+          <tbody id="standar-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: INVOICE -->
+  <div class="page" id="page-invoice">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Invoice &amp; Tagihan 2026</div>
+        <div class="text-sm text-muted mt-4">Semua tagihan diperiksa auditor berdasarkan standarisasi harga sebelum diproses pembayaran.</div>
+      </div>
+      <button class="btn btn-primary" onclick="showModal('modal-invoice-baru')">+ Buat Invoice</button>
+    </div>
+    <div class="alert alert-info mb-16">
+      <span style="flex-shrink:0">i</span>
+      <div><strong>Alur Verifikasi Invoice:</strong> Invoice masuk &rarr; Auditor periksa item vs standar harga Perbup (toleransi 10%) &rarr; Jika ada item melebihi batas, invoice dikembalikan untuk revisi &rarr; Setelah disetujui auditor, baru diproses pembayaran.</div>
+    </div>
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card" style="--sc:#2E8B5A"><div class="stat-label">Invoice Aktif</div><div class="stat-value">18</div><div class="stat-sub">Menunggu pembayaran</div></div>
+      <div class="stat-card" style="--sc:#1565C0"><div class="stat-label">Lunas Bulan Ini</div><div class="stat-value">12</div><div class="stat-sub">Rp 847.200.000</div></div>
+      <div class="stat-card" style="--sc:#E65100"><div class="stat-label">Jatuh Tempo</div><div class="stat-value">3</div><div class="stat-sub">Perlu segera diproses</div></div>
+      <div class="stat-card" style="--sc:#C62828"><div class="stat-label">Overdue</div><div class="stat-value">2</div><div class="stat-sub">Sudah lewat jatuh tempo</div></div>
+    </div>
+    <div class="card mt-16">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>No Invoice</th><th>Desa</th><th>Kegiatan</th><th>Nominal</th><th>Tanggal</th><th>Jatuh Tempo</th><th>Verif Auditor</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="invoice-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: PENGAJUAN -->
+  <div class="page" id="page-pengajuan">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Pengajuan Dana &amp; Pembangunan</div>
+        <div class="text-sm text-muted mt-4">Semua pengajuan diperiksa auditor berdasarkan standarisasi harga Perbup. RAB harus dilampirkan.</div>
+      </div>
+      <button class="btn btn-primary" onclick="showModal('modal-pengajuan')">+ Ajukan Dana</button>
+    </div>
+    <div class="alert alert-info mb-16">
+      <span style="flex-shrink:0">i</span>
+      <div><strong>Alur Pengajuan:</strong> Desa upload RAB &rarr; Sistem flag item yang melebihi standar harga +10% &rarr; Auditor review detail RAB &rarr; Jika ada markup, dikembalikan ke desa untuk revisi RAB &rarr; Auditor setujui/tolak final.</div>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Desa</th><th>Kegiatan</th><th>Nominal</th><th>Deadline</th><th>Sisa Waktu</th><th>Cek Standar Harga</th><th>Status Auditor</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="pengajuan-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: PROYEK -->
+  <div class="page" id="page-proyek">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Proyek Pembangunan Berjalan</div>
+        <div class="text-sm text-muted mt-4">Monitoring progres dengan batas waktu pengerjaan. Bukti foto diverifikasi AI Vision untuk keaslian.</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" onclick="showToast('Filter proyek diterapkan','success')">Filter</button>
+        <button class="btn btn-primary" onclick="showModal('modal-proyek-baru')">+ Tambah Proyek</button>
+      </div>
+    </div>
+    <div id="proyek-list"></div>
+  </div>
+
+  <!-- PAGE: BUKTI -->
+  <div class="page" id="page-bukti">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Bukti Pengerjaan Proyek</div>
+        <div class="text-sm text-muted mt-4">Foto dan dokumentasi diverifikasi AI Vision untuk keaslian. Cek harga tetap oleh auditor.</div>
+      </div>
+      <button class="btn btn-primary" onclick="showModal('modal-upload-bukti')">+ Upload Bukti</button>
+    </div>
+    <div class="alert alert-info mb-16">
+      <span style="flex-shrink:0">i</span>
+      <div><strong>AI Vision Bukti Foto:</strong> AI digunakan khusus untuk memverifikasi keaslian foto bukti pengerjaan — mendeteksi manipulasi digital, metadata palsu, timestamp tidak konsisten, dan foto yang digunakan ulang. AI tidak menilai harga atau kualitas pekerjaan; itu tugas auditor.</div>
+    </div>
+    <div id="bukti-list"></div>
+  </div>
+
+  <!-- PAGE: LAPORAN -->
+  <div class="page" id="page-laporan">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Laporan Warga (Anonim)</div>
+        <div class="text-sm text-muted mt-4">Identitas pelapor dilindungi sepenuhnya. Foto bukti diverifikasi AI Vision untuk keaslian.</div>
+      </div>
+      <button class="btn btn-danger" onclick="showModal('modal-laporan')">Buat Laporan</button>
+    </div>
+    <div class="alert alert-warn mb-16">
+      <span style="flex-shrink:0">&#128737;</span>
+      <div><strong>Perlindungan Identitas:</strong> Semua laporan diproses anonim. ID pelapor diacak otomatis. Tidak ada data personal yang tersimpan. Dijamin UU PDP.</div>
+    </div>
+    <div class="alert alert-info mb-16">
+      <span style="flex-shrink:0">i</span>
+      <div><strong>AI Vision Laporan Warga:</strong> AI digunakan untuk memverifikasi keaslian foto bukti yang dilampirkan warga — mendeteksi manipulasi dan inkonsistensi. Penilaian isi laporan dilakukan oleh auditor dan Inspektorat.</div>
+    </div>
+    <div id="laporan-list"></div>
+  </div>
+
+  <!-- PAGE: AUDITOR -->
+  <div class="page" id="page-auditor">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Auditor Independen</div>
+        <div class="text-sm text-muted mt-4">Tim auditor bersertifikasi. Memeriksa pengajuan dana, invoice, dan laporan keuangan berdasarkan standarisasi harga.</div>
+      </div>
+      <button class="btn btn-primary" onclick="showModal('modal-daftar-auditor')">+ Daftar Auditor</button>
+    </div>
+    <div class="alert alert-info mb-16">
+      <span style="flex-shrink:0">i</span>
+      <div><strong>Tugas Auditor:</strong> Memeriksa seluruh pengajuan dana dan invoice berdasarkan standarisasi harga Perbup No.3/2026 (toleransi 10%). Temuan markup atau ketidaksesuaian dieskalasi ke Inspektorat. Auditor juga memvalidasi laporan warga dari sisi substansi keuangan.</div>
+    </div>
+    <div class="grid-3 mb-20" id="auditor-grid"></div>
+    <div class="card mb-20">
+      <div class="card-header"><div class="card-title">Jadwal Audit Mendatang 2026</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Auditor</th><th>Desa</th><th>Bidang Audit</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="audit-schedule"></tbody>
+        </table>
+      </div>
+    </div>
+    <div style="font-size:17px;font-weight:800;margin-bottom:14px">Curriculum Vitae Auditor</div>
+    <div id="cv-auditor-list"></div>
+  </div>
+
+  <!-- PAGE: ANOMALI -->
+  <div class="page" id="page-anomali">
+    <div class="flex-between mb-20">
+      <div>
+        <div style="font-size:18px;font-weight:800">Deteksi Anomali</div>
+        <div class="text-sm text-muted mt-4">Anomali harga ditemukan auditor berdasarkan standarisasi Perbup. Anomali foto dideteksi AI Vision dari bukti pembangunan &amp; laporan warga.</div>
+      </div>
+    </div>
+    <div class="alert alert-danger mb-20">
+      <span style="flex-shrink:0">!</span>
+      <div><strong>4 anomali aktif</strong> memerlukan tindak lanjut. Markup harga: ditemukan auditor. Inkonsistensi foto: dideteksi AI Vision dari bukti pembangunan. Semua anomali sudah diteruskan ke auditor terkait.</div>
+    </div>
+    <div id="anomali-list"></div>
+  </div>
+
+</div><!-- /main-wrap -->
+</div><!-- /sc-app -->
+
+<!-- ============================================================ -->
+<!-- MODALS -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="modal-lupapw">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header"><div class="modal-title">Reset Password</div><button class="modal-close" onclick="closeModal('modal-lupapw')">x</button></div>
+    <div class="modal-body">
+      <div class="alert alert-info mb-16"><span>i</span><div>Link reset dikirim ke email dan WhatsApp yang terdaftar.</div></div>
+      <div class="form-group"><label class="form-label">Email Terdaftar</label><input class="form-control" type="email" placeholder="email@domain.com"></div>
+      <div class="form-group"><label class="form-label">Nomor HP / WhatsApp</label><input class="form-control" type="tel" placeholder="08xxxxxxxxxx"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-lupapw')">Batal</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-lupapw');showToast('Link reset dikirim ke email dan WhatsApp','success')">Kirim Link Reset</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-profile">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header"><div class="modal-title">Profil Pengguna</div><button class="modal-close" onclick="closeModal('modal-profile')">x</button></div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:60px;height:60px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#F5A623;margin:0 auto 10px" id="prof-ava">AD</div>
+        <div style="font-size:16px;font-weight:800" id="prof-name">Admin</div>
+        <div class="text-muted text-sm" id="prof-role">Kabupaten Tuban</div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-control" id="prof-email" readonly></div>
+      <div class="form-group"><label class="form-label">Nomor HP</label><input class="form-control" id="prof-hp" readonly></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-profile')">Tutup</button>
+      <button class="btn btn-danger" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-laporan">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Buat Laporan Warga (Anonim)</div><button class="modal-close" onclick="closeModal('modal-laporan')">x</button></div>
+    <div class="modal-body">
+      <div class="alert alert-success mb-16"><span>&#128737;</span><div>Identitas Anda <strong>100% anonim</strong>. Tidak ada data personal yang dikumpulkan. ID dibuat secara acak.</div></div>
+      <div class="form-group"><label class="form-label">Jenis Pelanggaran</label>
+        <select class="form-control"><option>-- Pilih Jenis --</option><option>Mark-up harga pengadaan</option><option>Proyek fiktif / tidak dikerjakan</option><option>Kualitas pekerjaan tidak sesuai</option><option>Dana tidak sesuai penggunaan</option><option>Laporan progres tidak jujur</option><option>Kolusi pengadaan barang/jasa</option><option>Lainnya</option></select>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Desa/Kelurahan</label>
+          <select class="form-control" id="laporan-desa"><option>-- Pilih Desa --</option><option>Desa Palang</option><option>Desa Rengel</option><option>Desa Semanding</option><option>Desa Plumpang</option><option>Desa Merakurak</option><option>Desa Kerek</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Periode Kejadian</label><input type="month" class="form-control" value="2026-03"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Deskripsi Lengkap</label><textarea class="form-control" rows="4" placeholder="Jelaskan secara detail. Semakin detail semakin mudah ditindaklanjuti..."></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Upload Bukti Foto (AI Vision akan verifikasi keaslian foto)</label>
+        <div class="file-upload-area" onclick="triggerUpload('laporan-file')">
+          <div class="file-upload-text">Klik atau drag &amp; drop foto/dokumen</div>
+          <div class="file-upload-hint">JPG, PNG, PDF — maks 10MB. AI akan analisis keaslian foto secara otomatis.</div>
+        </div>
+        <input type="file" id="laporan-file" multiple accept="image/*,.pdf" style="display:none" onchange="handleUpload(this,'laporan-prev','laporan')">
+        <div id="laporan-prev" class="proof-grid mt-8" style="display:none"></div>
+        <div id="laporan-ai-result"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-laporan')">Batal</button>
+      <button class="btn btn-danger" onclick="submitLaporan()">Kirim Laporan Anonim</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pengajuan">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header"><div class="modal-title">Pengajuan Dana / Pembangunan</div><button class="modal-close" onclick="closeModal('modal-pengajuan')">x</button></div>
+    <div class="modal-body">
+      <div class="alert alert-info mb-16"><span>i</span><div>RAB yang diupload akan diperiksa auditor berdasarkan standar harga Perbup No.3/2026 (toleransi 10%). Item yang melebihi batas akan ditandai dan pengajuan dikembalikan untuk revisi.</div></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Desa Pengaju</label>
+          <select class="form-control"><option>-- Pilih Desa --</option><option>Desa Palang</option><option>Desa Rengel</option><option>Desa Semanding</option><option>Desa Plumpang</option><option>Desa Merakurak</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Jenis Kegiatan</label>
+          <select class="form-control"><option>Pembangunan Infrastruktur</option><option>Pengadaan ATK</option><option>Konsumsi/Acara</option><option>Tenaga Kerja</option><option>Pengembangan SDM</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Nama Kegiatan / Proyek</label><input class="form-control" placeholder="Contoh: Pembangunan Jalan Desa RT 03 sepanjang 500m" id="pgj-nama"></div>
+      <div class="form-group"><label class="form-label">Deskripsi Lengkap</label><textarea class="form-control" rows="3" placeholder="Tujuan, manfaat, lokasi, spesifikasi teknis..."></textarea></div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">Nominal (Rp)</label><input class="form-control font-mono" placeholder="0" id="pgj-nominal"></div>
+        <div class="form-group"><label class="form-label">Tanggal Mulai</label><input type="date" class="form-control"></div>
+        <div class="form-group"><label class="form-label">Deadline (Wajib)</label><input type="date" class="form-control" id="pgj-deadline"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Upload RAB &amp; Dokumen Pendukung</label>
+        <div class="file-upload-area" onclick="triggerUpload('rab-file')">
+          <div class="file-upload-text">Upload RAB, Gambar Teknis, SK</div>
+          <div class="file-upload-hint">PDF, DOCX, XLSX — maks 20MB. Harga item RAB akan diverifikasi auditor vs standar Perbup.</div>
+        </div>
+        <input type="file" id="rab-file" style="display:none" accept=".pdf,.docx,.xlsx">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-pengajuan')">Batal</button>
+      <button class="btn btn-primary" onclick="submitPengajuan()">Ajukan Dana</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-upload-bukti">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Upload Bukti Pengerjaan</div><button class="modal-close" onclick="closeModal('modal-upload-bukti')">x</button></div>
+    <div class="modal-body">
+      <div class="alert alert-info mb-16"><span>i</span><div><strong>AI Vision:</strong> Foto yang diupload akan dianalisis AI untuk verifikasi keaslian — cek metadata, timestamp, dan tanda manipulasi digital. Ini bukan cek harga.</div></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Proyek</label>
+          <select class="form-control"><option>-- Pilih Proyek --</option><option>Jalan Desa Palang — PRJ-001</option><option>PAUD Rengel — PRJ-002</option><option>Balai Desa Merakurak — PRJ-005</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Tahap Pengerjaan</label>
+          <select class="form-control"><option>Pra-konstruksi (0%)</option><option>Fondasi (25%)</option><option>Struktur (50%)</option><option>Finishing (75%)</option><option>Selesai (100%)</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Foto Bukti (min 3 foto dari sudut berbeda)</label>
+        <div class="file-upload-area" onclick="triggerUpload('bukti-file')">
+          <div class="file-upload-text">Upload foto pengerjaan</div>
+          <div class="file-upload-hint">AI Vision akan verifikasi keaslian, metadata GPS, dan konsistensi dengan deskripsi progres.</div>
+        </div>
+        <input type="file" id="bukti-file" multiple accept="image/*" style="display:none" onchange="handleUpload(this,'bukti-prev','bukti')">
+        <div id="bukti-prev" class="proof-grid mt-8" style="display:none"></div>
+        <div id="bukti-ai-result"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Catatan Progres</label><textarea class="form-control" rows="2" placeholder="Keterangan progres pengerjaan..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-upload-bukti')">Batal</button>
+      <button class="btn btn-primary" onclick="submitBukti()">Submit Bukti</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-daftar-auditor">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Daftar Sebagai Auditor</div><button class="modal-close" onclick="closeModal('modal-daftar-auditor')">x</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nama Lengkap</label><input class="form-control" placeholder="Nama sesuai KTP"></div>
+        <div class="form-group"><label class="form-label">Nomor Sertifikat</label><input class="form-control font-mono" placeholder="CPA/CPAI-XXXX-XXXX"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Institusi / Lembaga</label><input class="form-control" placeholder="Nama kantor akuntan / instansi"></div>
+      <div class="form-group"><label class="form-label">Spesialisasi</label>
+        <select class="form-control"><option>Keuangan Desa (APBDes)</option><option>Pengadaan Barang/Jasa</option><option>Infrastruktur &amp; Konstruksi</option><option>IT &amp; Sistem Informasi</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Upload CV &amp; Sertifikat</label>
+        <div class="file-upload-area" onclick="triggerUpload('cv-file')">
+          <div class="file-upload-text">Upload CV, Sertifikat, NPWP</div>
+          <div class="file-upload-hint">PDF — maks 5MB per file</div>
+        </div>
+        <input type="file" id="cv-file" multiple accept=".pdf" style="display:none">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pernyataan Independensi</label>
+        <div style="display:flex;gap:9px;align-items:flex-start;padding:11px;background:var(--bg2);border-radius:8px;border:1px solid var(--border)">
+          <input type="checkbox" id="indep-check" style="margin-top:2px;accent-color:var(--primary-light)">
+          <label for="indep-check" style="font-size:12px;color:var(--text2);cursor:pointer">Saya menyatakan tidak memiliki konflik kepentingan dengan desa yang akan diaudit dan bersedia menjaga kerahasiaan serta objektivitas dalam setiap penugasan audit.</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-daftar-auditor')">Batal</button>
+      <button class="btn btn-primary" onclick="submitAuditor()">Daftarkan Auditor</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-harga-baru">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header"><div class="modal-title">Tambah Item Standar Harga</div><button class="modal-close" onclick="closeModal('modal-harga-baru')">x</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nama Item</label><input class="form-control" placeholder="Nama barang/jasa"></div>
+        <div class="form-group"><label class="form-label">Kategori</label><select class="form-control"><option>konstruksi</option><option>atk</option><option>makan</option><option>tenaga</option></select></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Satuan</label><input class="form-control" placeholder="m3, buah, rim, OH..."></div>
+        <div class="form-group"><label class="form-label">Harga Standar (Rp)</label><input class="form-control font-mono" placeholder="0" type="number"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Toleransi</label>
+        <div style="background:var(--bg2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);border:1px solid var(--border)">Toleransi seragam <strong>10%</strong> berlaku untuk semua item sesuai Perbup No.3/2026. Tidak dapat diubah per item.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-harga-baru')">Batal</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-harga-baru');showToast('Item standar harga ditambahkan','success')">Simpan Item</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-proyek-baru">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Tambah Proyek Baru</div><button class="modal-close" onclick="closeModal('modal-proyek-baru')">x</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nama Proyek</label><input class="form-control" placeholder="Nama proyek lengkap"></div>
+        <div class="form-group"><label class="form-label">Desa</label><select class="form-control"><option>-- Pilih Desa --</option><option>Desa Palang</option><option>Desa Rengel</option><option>Desa Semanding</option></select></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nilai Kontrak (Rp)</label><input class="form-control font-mono" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Petugas Pelaksana</label><input class="form-control" placeholder="Nama petugas"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Tanggal Mulai</label><input type="date" class="form-control"></div>
+        <div class="form-group"><label class="form-label">Deadline (Wajib)</label><input type="date" class="form-control"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-proyek-baru')">Batal</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-proyek-baru');showToast('Proyek baru berhasil ditambahkan','success')">Simpan Proyek</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-invoice-baru">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Buat Invoice Baru</div><button class="modal-close" onclick="closeModal('modal-invoice-baru')">x</button></div>
+    <div class="modal-body">
+      <div class="alert alert-info mb-16"><span>i</span><div>Invoice akan dikirim ke auditor untuk diverifikasi berdasarkan standar harga Perbup. Toleransi 10%.</div></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Desa</label><select class="form-control"><option>-- Pilih Desa --</option><option>Desa Palang</option><option>Desa Rengel</option></select></div>
+        <div class="form-group"><label class="form-label">Kegiatan</label><input class="form-control" placeholder="Nama kegiatan/pengadaan"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nominal (Rp)</label><input class="form-control font-mono" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Jatuh Tempo</label><input type="date" class="form-control"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-invoice-baru')">Batal</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-invoice-baru');showToast('Invoice dikirim ke auditor untuk verifikasi','success')">Kirim ke Auditor</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ═══════════ SCREEN MANAGEMENT ═══════════
+let currentRole = 'admin';
+let currentUser = {email:'',hp:''};
+
+function gotoLanding(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-landing').classList.add('active');
+}
+function gotoLogin(role){
+  currentRole = role||'admin';
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-login').classList.add('active');
+  document.querySelectorAll('.rpick-btn').forEach(b=>b.classList.remove('sel'));
+  const r=['admin','auditor','inspektorat','publik'];
+  const idx=r.indexOf(currentRole);
+  if(idx>=0) document.querySelectorAll('.rpick-btn')[idx].classList.add('sel');
+  document.getElementById('anon-info').classList.toggle('show',currentRole==='publik'||currentRole==='warga');
+}
+function setRole(el,role){
+  currentRole=role;
+  document.querySelectorAll('.rpick-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('anon-info').classList.toggle('show',role==='publik');
+}
+function doLogin(){
+  const email=document.getElementById('inp-email').value.trim();
+  const pass=document.getElementById('inp-pass').value;
+  const hp=document.getElementById('inp-hp').value.trim();
+  if(!email){showToast('Masukkan email terlebih dahulu','warning');return;}
+  if(!pass){showToast('Masukkan password terlebih dahulu','warning');return;}
+  currentUser={email,hp};
+  const roleLabel={admin:'Admin Desa',auditor:'Auditor Independen',inspektorat:'Inspektorat Tuban',publik:'Pengguna Publik'};
+  const initials=email.substring(0,2).toUpperCase();
+  document.getElementById('sb-ava').textContent=initials;
+  document.getElementById('sb-name').textContent=email.split('@')[0];
+  document.getElementById('sb-role').textContent=roleLabel[currentRole]||'Pengguna';
+  document.getElementById('prof-ava').textContent=initials;
+  document.getElementById('prof-name').textContent=email.split('@')[0];
+  document.getElementById('prof-role').textContent=roleLabel[currentRole]||'Pengguna';
+  document.getElementById('prof-email').value=email;
+  document.getElementById('prof-hp').value=hp||'-';
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-app').classList.add('active');
+  initDashboard();
+  showToast('Selamat datang, '+email.split('@')[0]+'!','success');
+}
+function doLogout(){
+  closeModal('modal-profile');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-landing').classList.add('active');
+  document.getElementById('inp-email').value='';
+  document.getElementById('inp-pass').value='';
+  document.getElementById('inp-hp').value='';
+}
+
+// ═══════════ DATA ═══════════
+const standarHarga=[
+  {id:1,nama:'Beton Cor K-250',kat:'konstruksi',satuan:'m3',harga:1920000,update:'2026-01-02'},
+  {id:2,nama:'Batu Bata Merah',kat:'konstruksi',satuan:'buah',harga:1200,update:'2026-01-02'},
+  {id:3,nama:'Pasir Urug',kat:'konstruksi',satuan:'m3',harga:185000,update:'2026-01-02'},
+  {id:4,nama:'Besi Tulangan D12',kat:'konstruksi',satuan:'batang',harga:87500,update:'2026-01-02'},
+  {id:5,nama:'Semen Portland 40kg',kat:'konstruksi',satuan:'sak',harga:68000,update:'2026-01-15'},
+  {id:6,nama:'Cat Tembok 25kg',kat:'konstruksi',satuan:'kaleng',harga:320000,update:'2026-01-02'},
+  {id:7,nama:'Kertas HVS A4 80gr',kat:'atk',satuan:'rim',harga:55000,update:'2026-01-02'},
+  {id:8,nama:'Ballpoint Standard',kat:'atk',satuan:'pak',harga:18000,update:'2026-01-02'},
+  {id:9,nama:'Spidol Whiteboard',kat:'atk',satuan:'pak',harga:38000,update:'2026-01-02'},
+  {id:10,nama:'Tinta Printer Epson',kat:'atk',satuan:'set',harga:185000,update:'2026-01-02'},
+  {id:11,nama:'Snack Rapat (per orang)',kat:'makan',satuan:'orang',harga:25000,update:'2026-01-02'},
+  {id:12,nama:'Makan Siang Rapat',kat:'makan',satuan:'orang',harga:45000,update:'2026-01-02'},
+  {id:13,nama:'Minuman Botol 600ml',kat:'makan',satuan:'buah',harga:5500,update:'2026-01-02'},
+  {id:14,nama:'Tukang Bangunan',kat:'tenaga',satuan:'OH',harga:150000,update:'2026-01-02'},
+  {id:15,nama:'Kepala Tukang',kat:'tenaga',satuan:'OH',harga:200000,update:'2026-01-02'},
+  {id:16,nama:'Pekerja Kasar',kat:'tenaga',satuan:'OH',harga:120000,update:'2026-01-02'},
+  {id:17,nama:'Operator Alat Berat',kat:'tenaga',satuan:'OH',harga:350000,update:'2026-01-02'},
+  {id:18,nama:'Beton Cor K-350',kat:'konstruksi',satuan:'m3',harga:2350000,update:'2026-01-02'},
+  {id:19,nama:'Genteng Beton',kat:'konstruksi',satuan:'buah',harga:4500,update:'2026-01-02'},
+  {id:20,nama:'Spanduk 3x1m',kat:'atk',satuan:'buah',harga:120000,update:'2026-01-02'},
+];
+
+const invoiceData=[
+  {id:'INV-2026-001',desa:'Desa Palang',kegiatan:'Pengadaan ATK Q1',nominal:12500000,tanggal:'2026-01-15',jatuh:'2026-03-15',verifAud:'disetujui',status:'overdue'},
+  {id:'INV-2026-002',desa:'Desa Rengel',kegiatan:'Konstruksi Drainase',nominal:248000000,tanggal:'2026-02-01',jatuh:'2026-04-01',verifAud:'sedang_review',status:'pending'},
+  {id:'INV-2026-003',desa:'Desa Semanding',kegiatan:'Konsumsi Musdes',nominal:4500000,tanggal:'2026-02-10',jatuh:'2026-03-10',verifAud:'disetujui',status:'lunas'},
+  {id:'INV-2026-004',desa:'Desa Plumpang',kegiatan:'Pembangunan Jalan',nominal:387000000,tanggal:'2026-02-20',jatuh:'2026-04-20',verifAud:'sedang_review',status:'pending'},
+  {id:'INV-2026-005',desa:'Desa Merakurak',kegiatan:'ATK Tahunan',nominal:18700000,tanggal:'2026-03-01',jatuh:'2026-03-25',verifAud:'markup_terdeteksi',status:'jatuh-tempo'},
+  {id:'INV-2026-006',desa:'Desa Kerek',kegiatan:'Pengadaan Alat Pertanian',nominal:95000000,tanggal:'2026-03-05',jatuh:'2026-04-05',verifAud:'disetujui',status:'pending'},
+  {id:'INV-2026-007',desa:'Desa Palang',kegiatan:'Pembangunan Posyandu',nominal:165000000,tanggal:'2026-01-20',jatuh:'2026-03-20',verifAud:'disetujui',status:'overdue'},
+  {id:'INV-2026-008',desa:'Desa Rengel',kegiatan:'Konsumsi Rapat BPD',nominal:6750000,tanggal:'2026-03-10',jatuh:'2026-04-10',verifAud:'disetujui',status:'lunas'},
+];
+
+const proyekData=[
+  {id:'PRJ-001',nama:'Pembangunan Jalan Desa RT 03-04',desa:'Desa Palang',nilai:287400000,mulai:'2026-01-15',selesai:'2026-04-15',progres:65,status:'berjalan',anomali:true,petugas:'Ahmad Fauzi'},
+  {id:'PRJ-002',nama:'Renovasi Gedung PAUD Mekarsari',desa:'Desa Rengel',nilai:148000000,mulai:'2026-02-01',selesai:'2026-05-01',progres:40,status:'berjalan',anomali:false,petugas:'Siti Rohmah'},
+  {id:'PRJ-003',nama:'Pembangunan Drainase Utama',desa:'Desa Semanding',nilai:195000000,mulai:'2025-12-01',selesai:'2026-03-01',progres:100,status:'selesai',anomali:false,petugas:'Budi Santoso'},
+  {id:'PRJ-004',nama:'Pengadaan Mesin Pompa Air',desa:'Desa Plumpang',nilai:78000000,mulai:'2026-01-10',selesai:'2026-02-28',progres:20,status:'molor',anomali:true,petugas:'Dewi Lestari'},
+  {id:'PRJ-005',nama:'Pembangunan Balai Desa',desa:'Desa Merakurak',nilai:425000000,mulai:'2026-03-01',selesai:'2026-07-01',progres:15,status:'berjalan',anomali:false,petugas:'Heru Wahyudi'},
+];
+
+const laporanData=[
+  {id:'RPT-7X9K',waktu:'2026-03-15 14:23',desa:'Desa Palang',jenis:'Mark-up harga',judul:'Harga Beton Jalan Desa Terlalu Mahal',isi:'Saya melihat nota pembelian beton cor untuk proyek jalan. Harga per m3 tertulis Rp 2.850.000 padahal harga pasar hanya Rp 1.920.000. Ada selisih hampir 50%, jauh di atas toleransi 10%.',status:'proses',foto:3,aiPhoto:92},
+  {id:'RPT-4M2P',waktu:'2026-03-12 09:15',desa:'Desa Plumpang',jenis:'Proyek fiktif',judul:'Pompa Air Belum Terpasang Padahal Dana Sudah Cair',isi:'Dana pengadaan pompa air dicairkan Januari 2026 tapi pompa tidak ada. Laporan progres 80% tidak ada bukti fisiknya.',status:'eskalasi',foto:5,aiPhoto:88},
+  {id:'RPT-1Z8R',waktu:'2026-03-10 16:45',desa:'Desa Rengel',jenis:'Kualitas pekerjaan',judul:'Tembok PAUD Sudah Retak Padahal Baru Dikerjakan',isi:'Gedung PAUD yang baru dikerjakan sudah terlihat retak di beberapa titik. Diduga campuran semen tidak sesuai spesifikasi.',status:'pending',foto:2,aiPhoto:75},
+  {id:'RPT-9Q3W',waktu:'2026-03-08 11:30',desa:'Desa Semanding',jenis:'Penggunaan dana',judul:'ATK Dibeli Tapi Tidak Pernah Dipakai di Kantor Desa',isi:'Laporan keuangan mencatat pembelian ATK Rp 18 juta namun stok kantor desa sangat sedikit. Diduga barang tidak pernah dibeli.',status:'pending',foto:1,aiPhoto:65},
+];
+
+const auditorData=[
+  {nama:'Dr. Muhamad Ihsan, CPA',cert:'CPA-2019-0824',institusi:'KAP Ihsan & Rekan',spesialis:['APBDes','Konstruksi','Pengadaan'],rating:4.9,audit:47,temuan:12,inisial:'MI',
+   riwayat:[{th:'2010',jabatan:'Auditor BPKP Jawa Timur',desk:'Audit keuangan daerah, 150+ laporan audit'},{th:'2016',jabatan:'Partner KAP Surabaya',desk:'Audit keuangan pemda dan BUMN regional'},{th:'2022',jabatan:'Lead KAP Ihsan & Rekan',desk:'Spesialis audit APBDes Kabupaten Tuban'}],
+   pendidikan:[{th:'2006',gelar:'S1 Akuntansi, Universitas Airlangga'},{th:'2010',gelar:'S2 Akuntansi, Universitas Brawijaya'},{th:'2019',gelar:'Certified Public Accountant (CPA) — IAPI'}]},
+  {nama:'Sari Dewi Rahayu, CPAI',cert:'CPAI-2020-1154',institusi:'BPK Perwakilan Jawa Timur',spesialis:['Keuangan Desa','Audit IT'],rating:4.7,audit:38,temuan:8,inisial:'SR',
+   riwayat:[{th:'2012',jabatan:'Auditor Junior BPK Jatim',desk:'Audit laporan keuangan pemerintah daerah'},{th:'2020',jabatan:'Senior Auditor BPK',desk:'Spesialisasi keuangan desa dan IT audit'}],
+   pendidikan:[{th:'2012',gelar:'S1 Akuntansi, Universitas Negeri Malang'},{th:'2020',gelar:'CPAI — Institut Akuntan Publik Indonesia'}]},
+  {nama:'Ir. Bambang Sutejo',cert:'IAI-2018-0632',institusi:'Universitas Tuban',spesialis:['Infrastruktur','Konstruksi'],rating:4.8,audit:52,temuan:15,inisial:'BS',
+   riwayat:[{th:'2005',jabatan:'Insinyur Konstruksi, Dinas PUPR Tuban',desk:'Pengawas infrastruktur jalan dan bangunan desa'},{th:'2018',jabatan:'Auditor Infrastruktur Independen',desk:'Audit proyek pembangunan desa Kab. Tuban'}],
+   pendidikan:[{th:'2005',gelar:'S1 Teknik Sipil, ITS Surabaya'},{th:'2018',gelar:'Sertifikat Auditor Infrastruktur — IAI'}]},
+];
+
+const anomaliData=[
+  {level:'critical',desa:'Desa Palang',proyek:'Jalan Desa RT03-04',jenis:'Mark-up Harga',item:'Beton Cor K-250',harga_diajukan:2850000,harga_standar:1920000,satuan:'m3',qty:85,total_selisih:79050000,persen_markup:48.4,sumber:'Auditor (Dr. M. Ihsan)',aiRole:'Tidak berlaku — anomali ini ditemukan auditor saat review RAB, bukan AI.',desc:'Harga beton yang diajukan melebihi standar Perbup sebesar 48,4%. Toleransi hanya 10%. Pengajuan dikembalikan ke Desa Palang untuk revisi RAB.',tanggal:'2026-03-15'},
+  {level:'high',desa:'Desa Plumpang',proyek:'Pengadaan Pompa Air',jenis:'Foto Bukti Tidak Konsisten',item:'Bukti Foto Progres',sumber:'AI Vision (bukti foto)',aiRole:'AI Vision mendeteksi: 4 foto identik digunakan dengan metadata tanggal berbeda. Kemungkinan foto lama dipakai ulang untuk laporan progres baru.',desc:'Laporan progres pemerintah menyatakan 80% selesai, namun AI Vision mendeteksi 4 foto identik dengan metadata berbeda. Perlu verifikasi lapangan oleh auditor.',tanggal:'2026-03-12'},
+  {level:'high',desa:'Desa Rengel',proyek:'Renovasi Gedung PAUD',jenis:'Kualitas Tidak Sesuai',item:'Campuran Beton',sumber:'Laporan Warga + Auditor',aiRole:'AI Vision pada foto laporan warga: mendeteksi pola retak yang konsisten dengan campuran semen di bawah standar.',desc:'Laporan warga disertai foto retak. Auditor memverifikasi inkonsistensi campuran semen. Perlu uji core drill untuk konfirmasi teknis.',tanggal:'2026-03-10'},
+  {level:'medium',desa:'Desa Semanding',proyek:'Pengadaan ATK',jenis:'Volume Tidak Wajar',item:'ATK Rp 18,7 Juta',sumber:'Auditor',aiRole:'Tidak berlaku — anomali ini ditemukan auditor saat review invoice ATK vs standar harga Perbup.',desc:'Nilai ATK Rp 18,7 juta tidak proporsional dengan kebutuhan kantor desa 15 staf. Auditor menemukan beberapa item melebihi standar harga +10%. Invoice dikembalikan untuk revisi.',tanggal:'2026-03-08'},
+];
+
+const pengajuanData=[
+  {id:'PGJ-2026-019',desa:'Desa Palang',kegiatan:'Perkerasan Jalan Dusun Krajan',nominal:145000000,deadline:'2026-06-30',sisa:104,cekStandar:'lulus',statusAud:'disetujui',status:'disetujui'},
+  {id:'PGJ-2026-020',desa:'Desa Rengel',kegiatan:'Pengadaan Komputer Kantor Desa',nominal:32500000,deadline:'2026-04-15',sisa:28,cekStandar:'perlu_review',statusAud:'sedang_review',status:'review'},
+  {id:'PGJ-2026-021',desa:'Desa Plumpang',kegiatan:'Beton Jalan RT05 — harga revisi',nominal:287400000,deadline:'2026-04-30',sisa:43,cekStandar:'markup',statusAud:'ditolak',status:'ditolak'},
+  {id:'PGJ-2026-022',desa:'Desa Merakurak',kegiatan:'Sarana Olahraga BUMDes',nominal:68000000,deadline:'2026-07-15',sisa:119,cekStandar:'lulus',statusAud:'pending',status:'pending'},
+  {id:'PGJ-2026-023',desa:'Desa Kerek',kegiatan:'Penerangan Jalan Umum LED',nominal:95000000,deadline:'2026-05-31',sisa:74,cekStandar:'lulus',statusAud:'disetujui',status:'disetujui'},
+];
+
+const anggaranData=[
+  {no:1,desa:'Desa Palang',kec:'Palang',dd:420000000,add:336000000,lain:94000000,serapan:72,anomali:true},
+  {no:2,desa:'Desa Rengel',kec:'Rengel',dd:310000000,add:248000000,lain:62000000,serapan:61,anomali:false},
+  {no:3,desa:'Desa Semanding',kec:'Semanding',dd:370000000,add:296000000,lain:74000000,serapan:88,anomali:false},
+  {no:4,desa:'Desa Plumpang',kec:'Plumpang',dd:340000000,add:272000000,lain:68000000,serapan:44,anomali:true},
+  {no:5,desa:'Desa Merakurak',kec:'Merakurak',dd:460000000,add:368000000,lain:92000000,serapan:55,anomali:false},
+  {no:6,desa:'Desa Kerek',kec:'Kerek',dd:255000000,add:204000000,lain:51000000,serapan:67,anomali:false},
+  {no:7,desa:'Desa Bancar',kec:'Bancar',dd:215000000,add:172000000,lain:43000000,serapan:73,anomali:false},
+  {no:8,desa:'Desa Widang',kec:'Widang',dd:190000000,add:152000000,lain:38000000,serapan:80,anomali:false},
+  {no:9,desa:'Desa Jatirogo',kec:'Jatirogo',dd:175000000,add:140000000,lain:35000000,serapan:69,anomali:false},
+  {no:10,desa:'Desa Montong',kec:'Montong',dd:195000000,add:156000000,lain:39000000,serapan:58,anomali:false},
+];
+
+const mapKecData=[
+  {kec:'Palang',desa:14,dana:'Rp 5,1M',serapan:68,status:'warn'},
+  {kec:'Rengel',desa:18,dana:'Rp 6,2M',serapan:75,status:'ok'},
+  {kec:'Semanding',desa:21,dana:'Rp 8,4M',serapan:82,status:'ok'},
+  {kec:'Plumpang',desa:16,dana:'Rp 5,8M',serapan:52,status:'warn'},
+  {kec:'Merakurak',desa:12,dana:'Rp 4,9M',serapan:61,status:'ok'},
+  {kec:'Kerek',desa:15,dana:'Rp 4,3M',serapan:74,status:'ok'},
+  {kec:'Bancar',desa:19,dana:'Rp 6,7M',serapan:79,status:'ok'},
+  {kec:'Widang',desa:11,dana:'Rp 3,6M',serapan:65,status:'ok'},
+];
+
+// ═══════════ NAVIGATION ═══════════
+const pageTitles={dashboard:'Dashboard Utama',map:'Peta Anggaran Desa',anggaran:'Anggaran & Dana',standar:'Standarisasi Harga',invoice:'Invoice & Tagihan',pengajuan:'Pengajuan Dana',proyek:'Proyek Berjalan',bukti:'Bukti Pengerjaan',laporan:'Laporan Warga',auditor:'Auditor Independen',anomali:'Deteksi Anomali'};
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[id]||id;
+  if(id==='standar') renderStandar('semua');
+  if(id==='invoice') renderInvoice();
+  if(id==='proyek') renderProyek();
+  if(id==='laporan') renderLaporan();
+  if(id==='auditor') renderAuditor();
+  if(id==='anomali') renderAnomali();
+  if(id==='pengajuan') renderPengajuan();
+  if(id==='bukti') renderBukti();
+  if(id==='anggaran') renderAnggaran();
+  if(id==='map') renderMap();
+  window.scrollTo(0,0);
+}
+
+// ═══════════ STANDAR HARGA ═══════════
+let sfilt='semua';
+function renderStandar(filter,items){
+  sfilt=filter;
+  const data=items||standarHarga.filter(d=>filter==='semua'||d.kat===filter);
+  document.getElementById('standar-table').innerHTML=data.map(d=>`
+    <tr>
+      <td class="text-muted font-mono" style="font-size:10.5px">${d.id}</td>
+      <td><div class="font-bold">${d.nama}</div></td>
+      <td><span class="badge ${d.kat==='konstruksi'?'bg-blue':d.kat==='atk'?'bg-purple':d.kat==='makan'?'bg-teal':'bg-orange'}">${d.kat}</span></td>
+      <td class="text-muted">${d.satuan}</td>
+      <td class="font-mono font-bold" style="color:var(--primary)">Rp ${d.harga.toLocaleString('id')}</td>
+      <td class="font-mono" style="color:#E65100">Rp ${Math.round(d.harga*1.1).toLocaleString('id')} <span class="badge bg-yellow" style="font-size:9px">+10%</span></td>
+      <td class="text-muted text-sm">${d.update}</td>
+      <td><span class="badge bg-green">Aktif</span></td>
+    </tr>`).join('');
+}
+function filterStandar(f,el){
+  document.querySelectorAll('#standar-tabs .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');renderStandar(f);
+}
+function searchStandar(q){
+  const f=standarHarga.filter(d=>d.nama.toLowerCase().includes(q.toLowerCase())||d.kat.toLowerCase().includes(q.toLowerCase()));
+  renderStandar(sfilt,f);
+}
+
+// ═══════════ INVOICE ═══════════
+function renderInvoice(){
+  const stm={lunas:'bg-green',pending:'bg-blue','jatuh-tempo':'bg-yellow',overdue:'bg-red'};
+  const stl={lunas:'Lunas',pending:'Pending','jatuh-tempo':'Jatuh Tempo',overdue:'Overdue'};
+  const aum={disetujui:'bg-green',sedang_review:'bg-yellow',markup_terdeteksi:'bg-red'};
+  const aul={disetujui:'Disetujui',sedang_review:'Sedang Review',markup_terdeteksi:'Markup Terdeteksi'};
+  document.getElementById('invoice-table').innerHTML=invoiceData.map(d=>`
+    <tr${d.status==='overdue'?' class="anomaly-row"':''}>
+      <td class="font-mono" style="font-size:11px">${d.id}</td>
+      <td class="font-bold">${d.desa}</td>
+      <td>${d.kegiatan}</td>
+      <td class="font-mono font-bold" style="color:var(--primary)">Rp ${d.nominal.toLocaleString('id')}</td>
+      <td class="text-muted text-sm">${d.tanggal}</td>
+      <td class="text-sm">${d.jatuh}</td>
+      <td><span class="badge ${aum[d.verifAud]}">${aul[d.verifAud]}</span></td>
+      <td><span class="badge ${stm[d.status]}">${stl[d.status]}</span></td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="showToast('Detail invoice ${d.id} ditampilkan','success')">Lihat</button>
+        ${d.status!=='lunas'?`<button class="btn btn-primary btn-sm" style="margin-left:4px" onclick="bayarInvoice('${d.id}')">Lunas</button>`:''}
+      </td>
+    </tr>`).join('');
+}
+function bayarInvoice(id){
+  const d=invoiceData.find(x=>x.id===id);
+  if(d){d.status='lunas';d.verifAud='disetujui';renderInvoice();showToast('Invoice '+id+' ditandai lunas!','success');}
+}
+
+// ═══════════ PROYEK ═══════════
+function renderProyek(){
+  document.getElementById('proyek-list').innerHTML=proyekData.map(d=>{
+    const today=new Date();const deadline=new Date(d.selesai);
+    const sisa=Math.ceil((deadline-today)/86400000);
+    const dlClass=sisa<0?'dl-over':sisa<14?'dl-warn':'dl-ok';
+    const stBadge={berjalan:'bg-blue',selesai:'bg-green',molor:'bg-red'};
+    const pfClass=d.progres>=75?'pf-green':d.progres>=40?'pf-blue':'pf-yellow';
+    return `<div class="card mb-12">
+      <div class="card-body">
+        <div class="flex-between mb-12">
+          <div>
+            <div style="display:flex;align-items:center;gap:9px">
+              <span class="font-mono text-xs text-muted">${d.id}</span>
+              ${d.anomali?'<span class="badge bg-red">Anomali</span>':''}
+              <span class="badge ${stBadge[d.status]}">${d.status.charAt(0).toUpperCase()+d.status.slice(1)}</span>
+            </div>
+            <div style="font-size:14.5px;font-weight:800;color:var(--text);margin-top:4px">${d.nama}</div>
+            <div class="text-sm text-muted mt-4">${d.desa} &nbsp;|&nbsp; Petugas: ${d.petugas}</div>
+          </div>
+          <div class="text-right">
+            <div style="font-size:18px;font-weight:900;color:var(--primary);font-family:var(--mono)">Rp ${(d.nilai/1000000).toFixed(1)}Jt</div>
+            <div class="text-xs text-muted">${d.mulai} &rarr; ${d.selesai}</div>
+          </div>
+        </div>
+        <div class="flex-between mb-4">
+          <span class="text-xs font-bold text-muted">PROGRES PENGERJAAN</span>
+          <span class="font-mono font-bold" style="font-size:12.5px;color:${d.progres>=75?'#2E7D32':d.progres>=40?'#1565C0':'#E65100'}">${d.progres}%</span>
+        </div>
+        <div class="progress-bar" style="height:9px"><div class="progress-fill ${pfClass}" style="width:${d.progres}%"></div></div>
+        <div class="flex-between mt-12">
+          <div class="deadline-bar ${dlClass}" style="flex:0 0 auto">
+            <div><div class="deadline-days">${sisa<0?Math.abs(sisa):sisa}</div><div class="deadline-label">${sisa<0?'hari terlambat':'hari tersisa'}</div></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" onclick="showPage('bukti',null)">Lihat Bukti Foto</button>
+            ${d.anomali?`<button class="btn btn-danger btn-sm" onclick="showPage('anomali',null)">Detail Anomali</button>`:''}
+            <button class="btn btn-primary btn-sm" onclick="showModal('modal-upload-bukti')">Upload Bukti Foto</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════ BUKTI ═══════════
+function renderBukti(){
+  const buktiSample=[
+    {proyek:'Jalan Desa RT03-04',desa:'Desa Palang',tanggal:'2026-03-14',tahap:'50% - Pengecoran',foto:4,ai:'valid',aiPct:91,catatan:'Keaslian foto terverifikasi. Metadata konsisten, tidak ada tanda manipulasi digital. Timestamp sesuai dengan tanggal upload.'},
+    {proyek:'Renovasi PAUD Mekarsari',desa:'Desa Rengel',tanggal:'2026-03-10',tahap:'25% - Fondasi',foto:3,ai:'warning',aiPct:62,catatan:'Terdeteksi inkonsistensi metadata pada 1 foto. Kemungkinan foto tidak diambil pada hari yang sama. Disarankan upload ulang dengan foto baru.'},
+    {proyek:'Pembangunan Balai Desa',desa:'Desa Merakurak',tanggal:'2026-03-08',tahap:'15% - Persiapan',foto:5,ai:'valid',aiPct:88,catatan:'Keaslian foto terverifikasi. Lokasi GPS sesuai koordinat proyek. Progres 15% konsisten dengan dokumentasi lain.'},
+  ];
+  document.getElementById('bukti-list').innerHTML=buktiSample.map(d=>`
+    <div class="card mb-16">
+      <div class="card-body">
+        <div class="flex-between mb-12">
+          <div>
+            <div style="font-size:14.5px;font-weight:800">${d.proyek}</div>
+            <div class="text-sm text-muted mt-4">${d.desa} &nbsp;|&nbsp; ${d.tanggal}</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span class="badge bg-blue">Tahap: ${d.tahap}</span>
+            <span class="badge ${d.ai==='valid'?'bg-green':'bg-yellow'}">AI Vision: ${d.aiPct}% — ${d.ai==='valid'?'Foto Valid':'Perlu Cek'}</span>
+          </div>
+        </div>
+        <div class="ai-result ${d.ai==='warning'?'warning':''}">
+          <div class="ai-label">AI Vision — Verifikasi Keaslian Foto</div>
+          <div class="ai-confidence" style="color:${d.ai==='valid'?'#2E7D32':'#E65100'}">${d.aiPct}% ${d.ai==='valid'?'Keaslian Terverifikasi':'Perlu Verifikasi Manual'}</div>
+          <div class="ai-desc mt-4">${d.catatan}</div>
+        </div>
+        <div class="proof-grid mt-12">
+          ${Array.from({length:d.foto},(_,i)=>`
+            <div class="proof-img" onclick="showToast('Foto ${i+1} dibuka','success')">
+              <span style="font-size:20px">&#128247;</span>
+              <span>Foto ${i+1}</span>
+              <span class="proof-ai-tag ${i===1&&d.ai==='warning'?'proof-ai-warn':'proof-ai-ok'}">${i===1&&d.ai==='warning'?'Periksa':'Valid'}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════ LAPORAN ═══════════
+function renderLaporan(){
+  const sb={proses:'bg-yellow',eskalasi:'bg-red',pending:'bg-gray',selesai:'bg-green'};
+  const sl={proses:'Diproses',eskalasi:'Dieskalasi',pending:'Menunggu',selesai:'Selesai'};
+  document.getElementById('laporan-list').innerHTML=laporanData.map(d=>`
+    <div class="report-item">
+      <div class="report-header">
+        <div class="anon-avatar">AN</div>
+        <div style="flex:1">
+          <div class="report-id">ANONIM &bull; ${d.id} &bull; ${d.waktu}</div>
+          <div class="report-title">${d.judul}</div>
+          <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+            <span class="badge bg-orange">${d.jenis}</span>
+            <span class="badge bg-blue">${d.desa}</span>
+            <span class="badge ${sb[d.status]}">${sl[d.status]}</span>
+            <span class="badge bg-purple">AI Foto: ${d.aiPhoto}% valid</span>
+          </div>
+        </div>
+      </div>
+      <div class="report-body">${d.isi}</div>
+      <div class="proof-grid">
+        ${Array.from({length:Math.min(d.foto,3)},(_,i)=>`
+          <div class="proof-img">
+            <span style="font-size:20px">&#128247;</span><span>Bukti ${i+1}</span>
+            <span class="proof-ai-tag ${d.aiPhoto>85?'proof-ai-ok':d.aiPhoto>70?'proof-ai-warn':'proof-ai-fake'}">AI ${d.aiPhoto>85?'Valid':d.aiPhoto>70?'Periksa':'Mencurigakan'}</span>
+          </div>`).join('')}
+      </div>
+      <div class="mt-12" style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="showToast('Detail laporan ${d.id} dibuka','success')">Detail Lengkap</button>
+        ${d.status==='pending'||d.status==='proses'?`<button class="btn btn-primary btn-sm" onclick="eskalasiLaporan('${d.id}')">Eskalasi ke Inspektorat</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════ AUDITOR ═══════════
+function renderAuditor(){
+  document.getElementById('auditor-grid').innerHTML=auditorData.map(d=>`
+    <div class="auditor-card" onclick="showToast('Membuka profil ${d.nama}...','success')">
+      <div class="auditor-cover"></div>
+      <div class="auditor-avatar">${d.inisial}</div>
+      <div class="auditor-body">
+        <div class="auditor-name">${d.nama}</div>
+        <div class="auditor-cert">${d.cert} &bull; ${d.institusi}</div>
+        <div class="auditor-tags">${d.spesialis.map(s=>`<span class="badge bg-blue">${s}</span>`).join('')}</div>
+        <div style="display:flex;gap:6px;margin-bottom:10px">
+          <span class="badge bg-green">Bintang ${d.rating}/5.0</span>
+          <span class="badge bg-teal">Aktif</span>
+        </div>
+        <div class="auditor-stat">
+          <div><div class="aud-stat-n">${d.audit}</div><div class="aud-stat-l">Audit</div></div>
+          <div><div class="aud-stat-n">${d.temuan}</div><div class="aud-stat-l">Temuan</div></div>
+          <div><div class="aud-stat-n">${d.rating}</div><div class="aud-stat-l">Rating</div></div>
+        </div>
+        <button class="btn btn-primary w-full mt-12" style="justify-content:center" onclick="event.stopPropagation();showToast('Mengunduh CV ${d.nama}...','success')">Download CV</button>
+        <button class="btn btn-outline w-full mt-8" style="justify-content:center" onclick="event.stopPropagation();showToast('Menghubungi ${d.nama}...','success')">Hubungi Auditor</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('audit-schedule').innerHTML=`
+    <tr><td>Dr. Muhamad Ihsan</td><td>Desa Palang</td><td>Keuangan &amp; Konstruksi</td><td>2026-03-25</td><td><span class="badge bg-yellow">Terjadwal</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Detail jadwal audit dibuka','success')">Detail</button></td></tr>
+    <tr><td>Sari Dewi Rahayu</td><td>Desa Plumpang</td><td>Pengadaan Barang</td><td>2026-03-28</td><td><span class="badge bg-yellow">Terjadwal</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Detail jadwal audit dibuka','success')">Detail</button></td></tr>
+    <tr><td>Ir. Bambang Sutejo</td><td>Desa Rengel</td><td>Infrastruktur</td><td>2026-04-02</td><td><span class="badge bg-gray">Direncanakan</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Detail jadwal audit dibuka','success')">Detail</button></td></tr>`;
+
+  document.getElementById('cv-auditor-list').innerHTML=auditorData.map(d=>`
+    <div class="cv-card">
+      <div class="cv-head">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--primary);font-size:14px">${d.inisial}</div>
+          <div><div style="font-weight:800;font-size:14px">${d.nama}</div><div class="text-xs text-muted">${d.cert} &bull; ${d.institusi}</div></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm" onclick="showToast('Mengunduh CV ${d.nama}...','success')">Download CV</button>
+          <button class="btn btn-primary btn-sm" onclick="showToast('Upload CV ${d.nama}','success')">Upload CV</button>
+        </div>
+      </div>
+      <div class="cv-body">
+        <div class="grid-2">
+          <div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Riwayat Pekerjaan</div>
+            ${d.riwayat.map(r=>`<div class="cv-item"><div class="cv-yr">${r.th}</div><div><div class="cv-content-t">${r.jabatan}</div><div class="cv-content-d">${r.desk}</div></div></div>`).join('')}
+          </div>
+          <div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Pendidikan &amp; Sertifikasi</div>
+            ${d.pendidikan.map(p=>`<div class="cv-item"><div class="cv-yr">${p.th}</div><div><div class="cv-content-t">${p.gelar}</div></div></div>`).join('')}
+            <div style="margin-top:12px;font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Spesialisasi</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">${d.spesialis.map(s=>`<span class="badge bg-blue">${s}</span>`).join('')}</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════ ANOMALI ═══════════
+function renderAnomali(){
+  const lc={critical:'bg-red',high:'bg-orange',medium:'bg-yellow'};
+  const ll={critical:'KRITIS',high:'TINGGI',medium:'SEDANG'};
+  document.getElementById('anomali-list').innerHTML=anomaliData.map(d=>`
+    <div class="card mb-16">
+      <div class="card-body">
+        <div class="flex-between mb-12">
+          <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+            <span class="badge ${lc[d.level]}">${ll[d.level]}</span>
+            <span class="badge bg-blue">${d.desa}</span>
+            <span class="badge bg-gray">${d.jenis}</span>
+            <span class="badge bg-teal">Sumber: ${d.sumber}</span>
+          </div>
+          <span class="text-xs text-muted">${d.tanggal}</span>
+        </div>
+        <div style="font-size:14.5px;font-weight:800;color:var(--text);margin-bottom:6px">${d.proyek}</div>
+        ${d.harga_diajukan?`
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;background:var(--bg);padding:13px;border-radius:8px;margin-bottom:11px">
+          <div><div class="text-xs text-muted mb-4">HARGA DIAJUKAN</div><div style="font-size:17px;font-weight:900;color:#C62828;font-family:var(--mono)">Rp ${d.harga_diajukan.toLocaleString('id')}</div><div class="text-xs text-muted">per ${d.satuan}</div></div>
+          <div><div class="text-xs text-muted mb-4">HARGA STANDAR</div><div style="font-size:17px;font-weight:900;color:#2E7D32;font-family:var(--mono)">Rp ${d.harga_standar.toLocaleString('id')}</div><div class="text-xs text-muted">per ${d.satuan}</div></div>
+          <div><div class="text-xs text-muted mb-4">DUGAAN KERUGIAN</div><div style="font-size:17px;font-weight:900;color:#C62828;font-family:var(--mono)">Rp ${d.total_selisih.toLocaleString('id')}</div><div class="text-xs text-muted">+${d.persen_markup}% di atas standar</div></div>
+        </div>`:''}
+        <div class="alert alert-danger" style="margin-bottom:10px">
+          <span style="flex-shrink:0">!</span>
+          <div><strong>Analisis:</strong> ${d.desc}</div>
+        </div>
+        <div class="alert alert-info" style="margin-bottom:12px">
+          <span style="flex-shrink:0">i</span>
+          <div><strong>Peran AI Vision:</strong> ${d.aiRole}</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-danger btn-sm" onclick="eskalasi('${d.desa}')">Eskalasi ke Inspektorat</button>
+          <button class="btn btn-primary btn-sm" onclick="tugasAuditor('${d.desa}')">Tugaskan Auditor</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Laporan anomali diunduh','success')">Export Laporan</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════ PENGAJUAN ═══════════
+function renderPengajuan(){
+  const csm={lulus:'bg-green',perlu_review:'bg-yellow',markup:'bg-red'};
+  const csl={lulus:'Sesuai Standar',perlu_review:'Perlu Review',markup:'Markup Terdeteksi'};
+  const aum={disetujui:'bg-green',sedang_review:'bg-yellow',ditolak:'bg-red',pending:'bg-gray'};
+  const stm={disetujui:'bg-green',review:'bg-yellow',ditolak:'bg-red',pending:'bg-gray'};
+  document.getElementById('pengajuan-table').innerHTML=pengajuanData.map(d=>{
+    const sisaClass=d.sisa<0?'color:#C62828':d.sisa<30?'color:#E65100':'color:#2E7D32';
+    return`<tr${d.cekStandar==='markup'?' class="anomaly-row"':''}>
+      <td class="font-mono" style="font-size:11px">${d.id}</td>
+      <td class="font-bold text-sm">${d.desa}</td>
+      <td>${d.kegiatan}</td>
+      <td class="font-mono font-bold" style="color:var(--primary)">Rp ${(d.nominal/1000000).toFixed(1)}Jt</td>
+      <td class="text-sm text-muted">${d.deadline}</td>
+      <td class="font-mono font-bold" style="${sisaClass}">${d.sisa<0?'TERLAMBAT!':d.sisa+' hari'}</td>
+      <td><span class="badge ${csm[d.cekStandar]}">${csl[d.cekStandar]}</span></td>
+      <td><span class="badge ${aum[d.statusAud]}">${d.statusAud.replace('_',' ')}</span></td>
+      <td><span class="badge ${stm[d.status]}">${d.status}</span></td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="showToast('Detail pengajuan ${d.id}','success')">Detail</button>
+        ${d.status==='pending'||d.status==='review'?`<button class="btn btn-primary btn-sm" style="margin-left:4px" onclick="approvePengajuan('${d.id}')">Setujui</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+function approvePengajuan(id){
+  const d=pengajuanData.find(x=>x.id===id);
+  if(d){d.status='disetujui';d.statusAud='disetujui';renderPengajuan();showToast('Pengajuan '+id+' disetujui','success');}
+}
+
+// ═══════════ ANGGARAN ═══════════
+function renderAnggaran(kec){
+  const data=kec?anggaranData.filter(d=>d.kec===kec):anggaranData;
+  document.getElementById('anggaran-table').innerHTML=data.map(d=>`
+    <tr${d.anomali?' class="anomaly-row"':''}>
+      <td class="text-muted">${d.no}</td>
+      <td class="font-bold">${d.desa} ${d.anomali?'<span class="badge bg-red" style="font-size:9px">Anomali</span>':''}</td>
+      <td class="text-muted">${d.kec}</td>
+      <td class="font-mono" style="color:var(--primary)">Rp ${d.dd.toLocaleString('id')}</td>
+      <td class="font-mono" style="color:#1565C0">Rp ${d.add.toLocaleString('id')}</td>
+      <td class="font-mono text-muted">Rp ${d.lain.toLocaleString('id')}</td>
+      <td class="font-mono font-bold">Rp ${(d.dd+d.add+d.lain).toLocaleString('id')}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div class="progress-bar" style="width:65px;margin:0"><div class="progress-fill ${d.serapan>=70?'pf-green':d.serapan>=50?'pf-yellow':'pf-red'}" style="width:${d.serapan}%"></div></div>
+          <span class="font-mono text-xs">${d.serapan}%</span>
+        </div>
+      </td>
+      <td>${d.anomali?'<span class="badge bg-yellow">Dalam Audit</span>':'<span class="badge bg-green">Aman</span>'}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="showToast('Detail anggaran ${d.desa} dibuka','success')">Detail</button></td>
+    </tr>`).join('');
+}
+function filterAnggaran(kec){renderAnggaran(kec||null);}
+
+// ═══════════ MAP ═══════════
+function renderMap(){
+  document.getElementById('map-table').innerHTML=mapKecData.map(d=>`
+    <tr>
+      <td class="font-bold">${d.kec}</td>
+      <td class="text-muted">${d.desa}</td>
+      <td class="font-mono" style="color:var(--primary)">${d.dana}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div class="progress-bar" style="width:60px;margin:0"><div class="progress-fill ${d.serapan>=70?'pf-green':'pf-yellow'}" style="width:${d.serapan}%"></div></div>
+          <span class="font-mono text-xs">${d.serapan}%</span>
+        </div>
+      </td>
+      <td><span class="badge ${d.status==='ok'?'bg-green':'bg-yellow'}">${d.status==='ok'?'Normal':'Perhatian'}</span></td>
+    </tr>`).join('');
+}
+function mapDetail(nama,kec,dana,ket,status){
+  const colors={ok:'#4CAF50',warn:'#FF9800',kritis:'#E53935'};
+  const box=document.getElementById('map-detail-box');
+  box.style.display='block';
+  box.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:10px;height:10px;border-radius:50%;background:${colors[status]};flex-shrink:0"></div><div style="font-size:14px;font-weight:800">${nama}</div><div style="font-size:11px;opacity:.6">${kec}</div></div><div style="font-size:13px;margin-bottom:4px">Dana: <strong>${dana}</strong></div><div style="font-size:12px;opacity:.75">${ket}</div><button style="margin-top:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:var(--font)" onclick="showToast('Detail ${nama} dibuka','success')">Lihat Detail Anggaran</button>`;
+}
+
+// ═══════════ DASHBOARD ═══════════
+function initDashboard(){
+  const chart=document.getElementById('monthly-chart');
+  if(!chart)return;
+  const months=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt'];
+  const vals=[420,650,380,720,890,540,770,920,680,410];
+  const max=Math.max(...vals);
+  const colors=['#2E8B5A','#1565C0','#E65100','#2E8B5A','#1565C0','#E65100','#2E8B5A','#1565C0','#E65100','#2E8B5A'];
+  chart.innerHTML=vals.map((v,i)=>`
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative">
+      <div style="font-size:8px;color:var(--text3);font-family:var(--mono);margin-bottom:2px">${v}jt</div>
+      <div style="width:100%;height:${Math.round((v/max)*155)}px;background:${colors[i]};border-radius:4px 4px 0 0;opacity:${i===9?.4:1};cursor:pointer;transition:opacity .2s" onmouseover="this.style.opacity=.7" onmouseout="this.style.opacity='${i===9?.4:1}'"></div>
+      <div style="font-size:9px;color:var(--text3);margin-top:4px;font-weight:600">${months[i]}</div>
+    </div>`).join('');
+
+  const activities=[
+    {icon:'!',text:'Laporan warga baru — Desa Plumpang',time:'2 menit lalu',bg:'#FFEBEE'},
+    {icon:'*',text:'Auditor mendeteksi markup harga — Desa Palang',time:'15 menit lalu',bg:'#FFF8E1'},
+    {icon:'v',text:'Invoice INV-2026-003 dibayar lunas',time:'1 jam lalu',bg:'#E8F5E9'},
+    {icon:'k',text:'AI Vision: foto PRJ-001 terverifikasi asli',time:'2 jam lalu',bg:'#E3F2FD'},
+    {icon:'+',text:'Pengajuan dana baru — Desa Merakurak',time:'3 jam lalu',bg:'#F3E5F5'},
+    {icon:'?',text:'Jadwal audit dikonfirmasi — Desa Rengel',time:'5 jam lalu',bg:'#E8F5E9'},
+  ];
+  document.getElementById('activity-feed').innerHTML=activities.map(a=>`
+    <div style="display:flex;align-items:flex-start;gap:11px;padding:11px 15px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+      <span style="width:30px;height:30px;border-radius:8px;background:${a.bg};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0">${a.icon}</span>
+      <div style="flex:1"><div style="font-size:12.5px;font-weight:600;color:var(--text)">${a.text}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${a.time}</div></div>
+    </div>`).join('');
+
+  const desaRank=[
+    {nama:'Desa Semanding',score:94,dir:'+'},
+    {nama:'Desa Merakurak',score:91,dir:'+'},
+    {nama:'Desa Kerek',score:87,dir:'='},
+    {nama:'Desa Rengel',score:82,dir:'-'},
+    {nama:'Desa Palang',score:54,dir:'-'},
+    {nama:'Desa Plumpang',score:47,dir:'-'},
+  ];
+  document.getElementById('transparency-rank').innerHTML=desaRank.map((d,i)=>`
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 14px;border-bottom:1px solid #f0f0f0">
+      <span style="width:22px;height:22px;border-radius:6px;background:${i<3?'var(--primary)':'var(--bg2)'};color:${i<3?'#fff':'var(--text3)'};display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;flex-shrink:0">${i+1}</span>
+      <div style="flex:1">
+        <div style="font-size:12.5px;font-weight:700">${d.nama}</div>
+        <div class="progress-bar" style="height:3px;margin:3px 0 0"><div class="progress-fill ${d.score>=80?'pf-green':d.score>=60?'pf-yellow':'pf-red'}" style="width:${d.score}%"></div></div>
+      </div>
+      <span style="font-size:13.5px;font-weight:800;font-family:var(--mono);color:${d.score>=80?'#2E7D32':d.score>=60?'#E65100':'#C62828'}">${d.score}</span>
+      <span style="color:${d.dir==='+'?'#2E7D32':d.dir==='-'?'#C62828':'#888'};font-size:11.5px;font-weight:700">${d.dir}</span>
+    </div>`).join('');
+}
+
+// ═══════════ FILE UPLOAD ═══════════
+function triggerUpload(id){document.getElementById(id)?.click();}
+function handleUpload(input,prevId,type){
+  const prev=document.getElementById(prevId);
+  const resId=type+'-ai-result';
+  if(!input.files.length)return;
+  prev.style.display='grid';prev.innerHTML='';
+  let started=false;
+  Array.from(input.files).forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const div=document.createElement('div');
+      div.className='proof-img';
+      div.style.cssText=`background-image:url(${e.target.result});background-size:cover;background-position:center`;
+      div.innerHTML=`<span class="proof-ai-tag" style="background:#FF9800;color:#fff">Menganalisis...</span>`;
+      prev.appendChild(div);
+      if(!started){started=true;runAIVision(resId,type,div);}
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function runAIVision(resId,type,thumbDiv){
+  const res=document.getElementById(resId);
+  res.innerHTML=`<div class="ai-result" style="margin-top:11px"><div class="ai-label">AI Vision sedang menganalisis keaslian foto...</div><div class="ai-desc">Memeriksa metadata, timestamp, tanda manipulasi digital, dan konsistensi dengan deskripsi...</div></div>`;
+  setTimeout(()=>{
+    const score=Math.floor(Math.random()*30)+65;
+    const valid=score>80;
+    const isProyek=type==='bukti';
+    res.innerHTML=`<div class="ai-result ${valid?'':'warning'}" style="margin-top:11px">
+      <div class="ai-label">AI Vision — Selesai — ${new Date().toLocaleTimeString('id')}</div>
+      <div class="ai-confidence" style="color:${valid?'#2E7D32':'#E65100'}">${score}% — ${valid?'Foto Terverifikasi Asli':'Perlu Verifikasi Manual'}</div>
+      <div class="ai-desc mt-4">${valid
+        ?'Metadata foto konsisten. Tidak ditemukan tanda manipulasi digital. Timestamp valid. '+(isProyek?'Lokasi GPS sesuai koordinat proyek.':'Informasi relevan dengan laporan.')
+        :'Metadata tanggal tidak konsisten dengan timestamp upload. Terdeteksi kemungkinan kompresi ulang. '+(isProyek?'Koordinat GPS tidak terverifikasi.':'Disarankan sertakan foto tambahan.')}</div>
+    </div>`;
+    if(thumbDiv){
+      thumbDiv.querySelector('.proof-ai-tag').className=`proof-ai-tag ${valid?'proof-ai-ok':'proof-ai-warn'}`;
+      thumbDiv.querySelector('.proof-ai-tag').textContent=valid?'Valid':'Periksa';
+    }
+  },2200);
+}
+
+// ═══════════ MODALS ═══════════
+function showModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+});
+
+// ═══════════ SUBMITS ═══════════
+function submitLaporan(){
+  const desa=document.getElementById('laporan-desa').value;
+  if(!desa||desa==='-- Pilih Desa --'){showToast('Pilih desa terlebih dahulu','warning');return;}
+  closeModal('modal-laporan');
+  showToast('Laporan anonim berhasil dikirim! ID: RPT-'+Math.random().toString(36).substr(2,4).toUpperCase(),'success');
+}
+function submitPengajuan(){
+  closeModal('modal-pengajuan');
+  showToast('Pengajuan dikirim. Sistem akan menandai item yang melebihi standar harga untuk review auditor.','success');
+  setTimeout(()=>showToast('Auditor akan memeriksa RAB dalam 1x24 jam','success'),2500);
+}
+function submitBukti(){
+  closeModal('modal-upload-bukti');
+  showToast('Bukti foto diupload. AI Vision sedang verifikasi keaslian foto...','success');
+}
+function submitAuditor(){
+  if(!document.getElementById('indep-check').checked){showToast('Harap centang pernyataan independensi','warning');return;}
+  closeModal('modal-daftar-auditor');
+  showToast('Pendaftaran auditor berhasil! Menunggu verifikasi admin.','success');
+}
+function eskalasiLaporan(id){showToast('Laporan '+id+' dieskalasi ke Inspektorat Kab. Tuban','danger');}
+function eskalasi(desa){showToast('Anomali '+desa+' dieskalasi ke Inspektorat','danger');}
+function tugasAuditor(desa){showToast('Auditor ditugaskan untuk investigasi '+desa,'success');}
+
+// ═══════════ TOAST ═══════════
+function showToast(msg,type=''){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(16px)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},3500);
+}
+
+// ═══════════ CLOCK ═══════════
+function updateClock(){
+  const now=new Date();
+  const cl=document.getElementById('clock');
+  const td=document.getElementById('topbar-date');
+  if(cl)cl.textContent=now.toLocaleTimeString('id-ID');
+  if(td)td.textContent=now.toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+setInterval(updateClock,1000);
+updateClock();
+</script>
+</body>
+</html>
